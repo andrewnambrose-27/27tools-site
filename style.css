@@ -657,14 +657,17 @@ footer a:hover {
 }
 
 .privacy-banner {
-  max-width: 620px;
-  width: 100%;
-  margin-bottom: 18px;
+  max-width: 460px;
+  width: 90%;
+  margin: 10px auto 16px;
+  display: block;
+
   filter:
     drop-shadow(0 0 18px rgba(245,163,0,0.12))
     drop-shadow(0 0 40px rgba(245,163,0,0.06));
-}
 
+  animation: logoFloat 6s ease-in-out infinite;
+}
 /* ===== BACK BUTTON ===== */
 
 .home-button {
