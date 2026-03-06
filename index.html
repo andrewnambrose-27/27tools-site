@@ -55,10 +55,10 @@
         const px = x / rect.width;
         const py = y / rect.height;
 
-        const rotateY = (px - 0.5) * 10;
-        const rotateX = (0.5 - py) * 10;
+        const rotateY = (px - 0.5) * 3;
+        const rotateX = (0.5 - py) * 3;
 
-        card.style.transform = `rotateX(${rotateX}deg) rotateY(${rotateY}deg) translateY(-4px)`;
+        card.style.transform = `rotateX(${rotateX}deg) rotateY(${rotateY}deg) translateY(-2px)`;
         card.style.setProperty("--mx", `${px * 100}%`);
         card.style.setProperty("--my", `${py * 100}%`);
       });
