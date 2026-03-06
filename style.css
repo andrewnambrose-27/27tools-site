@@ -428,6 +428,13 @@ h1 {
   z-index:0;
 }
 
+.cursor-glow {
+  transition:
+    width 0.22s ease,
+    height 0.22s ease,
+    opacity 0.22s ease;
+}
+
 .particles{
   position:fixed;
   inset:0;
