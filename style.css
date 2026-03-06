@@ -117,11 +117,9 @@ h1 {
   padding: 40px 28px;
   border: 1px solid var(--border);
   border-radius: 24px;
-  background: linear-gradient(
-    180deg,
-    rgba(255,255,255,0.04),
-    rgba(255,255,255,0.02)
-  );
+  background:
+    linear-gradient(180deg, rgba(255,255,255,0.05), rgba(255,255,255,0.022)),
+    linear-gradient(135deg, rgba(255,255,255,0.02), rgba(255,255,255,0.008));
   backdrop-filter: blur(10px);
   box-shadow:
     0 20px 60px rgba(0,0,0,0.35),
@@ -280,6 +278,25 @@ h1 {
     0 0 30px rgba(255,255,255,0.04);
 }
 
+.hero-card::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: 24px;
+  background:
+    radial-gradient(
+      500px circle at var(--mx, 50%) var(--my, 50%),
+      rgba(255, 185, 60, 0.07) 0%,
+      rgba(255, 185, 60, 0.035) 22%,
+      rgba(255, 255, 255, 0.025) 38%,
+      transparent 60%
+    );
+  opacity: 0;
+  transition: opacity 0.25s ease;
+  pointer-events: none;
+  z-index: 0;
+}
+
 /* keep text from being too huge on mobile */
 @media (max-width: 640px) {
   .logo-text {
@@ -411,28 +428,28 @@ h1 {
   backdrop-filter: blur(8px);
 }
 
-.cursor-glow{
+.cursor-glow {
   position: fixed;
   width: 320px;
   height: 320px;
-  pointer-events:none;
-  border-radius:50%;
-  background: radial-gradient(circle,
-    rgba(255,170,40,0.35) 0%,
-    rgba(255,170,40,0.15) 35%,
-    rgba(255,170,40,0.06) 55%,
-    transparent 70%);
-  transform: translate(-50%,-50%);
+  pointer-events: none;
+  border-radius: 50%;
+  background: radial-gradient(
+    circle,
+    rgba(255, 170, 40, 0.28) 0%,
+    rgba(255, 170, 40, 0.12) 35%,
+    rgba(255, 170, 40, 0.05) 55%,
+    transparent 72%
+  );
+  transform: translate(-50%, -50%);
   mix-blend-mode: screen;
   filter: blur(40px);
-  z-index:0;
-}
-
-.cursor-glow {
+  z-index: 0;
   transition:
-    width 0.22s ease,
-    height 0.22s ease,
-    opacity 0.22s ease;
+    width 0.25s ease,
+    height 0.25s ease,
+    opacity 0.25s ease,
+    filter 0.25s ease;
 }
 
 .particles{
