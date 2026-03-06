@@ -112,10 +112,11 @@ h1 {
 
 /* nice little glass panel if you want content to feel more designed */
 .hero-card {
+  position: relative;
   max-width: 760px;
   margin: 0 auto;
   padding: 40px 28px;
-  border: 1px solid var(--border);
+  border: 1px solid rgba(255, 255, 255, 0.10);
   border-radius: 24px;
   background:
     linear-gradient(180deg, rgba(255,255,255,0.05), rgba(255,255,255,0.022)),
@@ -124,6 +125,14 @@ h1 {
   box-shadow:
     0 20px 60px rgba(0,0,0,0.35),
     inset 0 1px 0 rgba(255,255,255,0.04);
+  transform-style: preserve-3d;
+  transition:
+    transform 0.18s ease,
+    box-shadow 0.25s ease,
+    border-color 0.25s ease,
+    background 0.25s ease;
+  will-change: transform;
+  overflow: hidden;
 }
 
 .hero-card::before{
@@ -146,18 +155,6 @@ h1 {
   perspective: 1400px;
 }
 
-.hero-card {
-  position: relative;
-  transform-style: preserve-3d;
-  transition:
-    transform 0.18s ease,
-    box-shadow 0.25s ease,
-    border-color 0.25s ease,
-    background 0.25s ease;
-  will-change: transform;
-  overflow: hidden;
-}
-
 /* stronger glow behind card */
 .hero-card::before {
   content: "";
@@ -165,16 +162,22 @@ h1 {
   inset: -80px;
   border-radius: 36px;
   background:
-    radial-gradient(circle at var(--mx, 50%) var(--my, 50%),
-      rgba(245, 163, 0, 0.26) 0%,
-      rgba(245, 163, 0, 0.10) 20%,
-      rgba(245, 163, 0, 0.04) 38%,
-      transparent 62%);
+    radial-gradient(
+      circle at var(--mx, 50%) var(--my, 50%),
+      rgba(245, 163, 0, 0.18) 0%,
+      rgba(245, 163, 0, 0.08) 22%,
+      rgba(245, 163, 0, 0.03) 40%,
+      transparent 65%
+    );
   filter: blur(40px);
-  opacity: 0.55;
-  z-index: -2;
+  opacity: 0;
+  z-index: -1;
   transition: opacity 0.25s ease;
   pointer-events: none;
+}
+
+.hero-card:hover::before {
+  opacity: 1;
 }
 
 /* internal light that follows mouse on card */
@@ -184,15 +187,21 @@ h1 {
   inset: 0;
   border-radius: 24px;
   background:
-    radial-gradient(circle at var(--mx, 50%) var(--my, 50%),
-      rgba(255, 190, 70, 0.16) 0%,
-      rgba(255, 190, 70, 0.08) 16%,
-      rgba(255, 255, 255, 0.04) 28%,
-      transparent 48%);
+    radial-gradient(
+      500px circle at var(--mx, 50%) var(--my, 50%),
+      rgba(255, 185, 60, 0.05) 0%,
+      rgba(255, 185, 60, 0.025) 24%,
+      rgba(255, 255, 255, 0.02) 40%,
+      transparent 62%
+    );
   opacity: 0;
   transition: opacity 0.25s ease;
   pointer-events: none;
   z-index: 0;
+}
+
+.hero-card:hover::after {
+  opacity: 1;
 }
 
 .hero-card:hover {
@@ -200,11 +209,6 @@ h1 {
   box-shadow:
     0 28px 80px rgba(0, 0, 0, 0.42),
     0 0 0 1px rgba(255,255,255,0.03) inset;
-}
-
-.hero-card:hover::before,
-.hero-card:hover::after {
-  opacity: 1;
 }
 
 /* lift real content above overlay */
