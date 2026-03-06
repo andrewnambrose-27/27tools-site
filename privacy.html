@@ -1,44 +1,136 @@
 <!DOCTYPE html>
-<html>
-
+<html lang="en">
 <head>
-<title>Privacy Policy - 27Tools</title>
-<link rel="stylesheet" href="style.css">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Privacy Policy | 27Tools</title>
+  <link rel="stylesheet" href="style.css" />
 </head>
-
 <body>
+  <div class="cursor-glow"></div>
+  <div class="particles"></div>
 
-<div class="container">
+  <div class="container privacy-container">
+    <div class="hero-card privacy-card" id="privacy-card">
+      <a href="index.html" class="back-link">← Back to home</a>
 
-<h1>Privacy Policy</h1>
+      <div class="privacy-header">
+        <span class="status-pill">Privacy</span>
+        <h1 class="privacy-title">Privacy Policy</h1>
+        <p class="privacy-updated">Last updated: 6 March 2026</p>
+      </div>
 
-<p>
-27Tools does not collect personal information from users.
-</p>
+      <div class="privacy-content">
+        <p>
+          27Tools respects your privacy. This page explains what information may be collected
+          when you use this website and any tools provided through it.
+        </p>
 
-<p>
-Some apps published by 27Tools may use third-party services such as Google AdMob to display advertisements.
-These services may collect anonymous usage data to provide better advertising experiences.
-</p>
+        <h2>Information We Collect</h2>
+        <p>
+          We may collect limited technical information such as browser type, device type,
+          pages visited, and general usage analytics to help improve the site and tools.
+        </p>
 
-<p>
-No personally identifiable information is stored or shared by 27Tools.
-</p>
+        <h2>How Information Is Used</h2>
+        <p>
+          Any information collected is used to operate, maintain, and improve the website,
+          understand usage trends, and help develop future tools and features.
+        </p>
 
-<p>
-If you have any questions about this Privacy Policy you can contact us at:
-</p>
+        <h2>Cookies</h2>
+        <p>
+          This website may use basic cookies or similar technologies for functionality,
+          analytics, and performance monitoring.
+        </p>
 
-<p>
-contact@27tools.co
-</p>
+        <h2>Third-Party Services</h2>
+        <p>
+          Some tools or pages may rely on third-party services such as hosting, analytics,
+          or embedded content providers. Those services may process data according to their
+          own privacy policies.
+        </p>
 
-<footer>
-<a href="index.html">Back to Home</a>
-</footer>
+        <h2>Data Sharing</h2>
+        <p>
+          Personal information is not sold. Information may only be shared where required
+          for site functionality, legal compliance, or essential service operation.
+        </p>
 
-</div>
+        <h2>Data Security</h2>
+        <p>
+          Reasonable steps are taken to protect information, but no internet-based service
+          can be guaranteed completely secure.
+        </p>
 
+        <h2>Your Rights</h2>
+        <p>
+          Depending on your location, you may have rights relating to access, correction,
+          or deletion of personal information.
+        </p>
+
+        <h2>Contact</h2>
+        <p>
+          If you have any questions about this privacy policy, please contact 27Tools
+          through the appropriate site contact method when available.
+        </p>
+      </div>
+    </div>
+
+    <footer>
+      <p>© 2026 27Tools • Built by Andrew</p>
+    </footer>
+  </div>
+
+  <script>
+    const glow = document.querySelector(".cursor-glow");
+    const card = document.getElementById("privacy-card");
+
+    document.addEventListener("mousemove", (e) => {
+      if (!glow) return;
+      glow.style.left = e.clientX + "px";
+      glow.style.top = e.clientY + "px";
+    });
+
+    if (card) {
+      card.addEventListener("mousemove", (e) => {
+        const rect = card.getBoundingClientRect();
+        const x = e.clientX - rect.left;
+        const y = e.clientY - rect.top;
+
+        const px = x / rect.width;
+        const py = y / rect.height;
+
+        const rotateY = (px - 0.5) * 2.5;
+        const rotateX = (0.5 - py) * 2.5;
+
+        card.style.transform = `rotateX(${rotateX}deg) rotateY(${rotateY}deg) translateY(-2px)`;
+        card.style.setProperty("--mx", `${px * 100}%`);
+        card.style.setProperty("--my", `${py * 100}%`);
+      });
+
+      card.addEventListener("mouseenter", () => {
+        if (glow) {
+          glow.style.width = "170px";
+          glow.style.height = "170px";
+          glow.style.opacity = "0.30";
+          glow.style.filter = "blur(26px)";
+        }
+      });
+
+      card.addEventListener("mouseleave", () => {
+        if (glow) {
+          glow.style.width = "320px";
+          glow.style.height = "320px";
+          glow.style.opacity = "0.9";
+          glow.style.filter = "blur(40px)";
+        }
+
+        card.style.transform = "rotateX(0deg) rotateY(0deg) translateY(0px)";
+        card.style.setProperty("--mx", "50%");
+        card.style.setProperty("--my", "50%");
+      });
+    }
+  </script>
 </body>
-
 </html>
