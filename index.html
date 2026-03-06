@@ -6,6 +6,16 @@
   <title>27Tools</title>
   <link rel="stylesheet" href="style.css" />
 </head>
+  <div class="cursor-glow"></div>
+
+<script>
+const glow = document.querySelector(".cursor-glow");
+
+document.addEventListener("mousemove", e => {
+  glow.style.left = e.clientX + "px";
+  glow.style.top = e.clientY + "px";
+});
+</script>
 <body>
   <div class="container">
     <div class="hero-card">
