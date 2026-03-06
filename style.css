@@ -648,3 +648,57 @@ footer a:hover {
     margin-top: 28px;
   }
 }
+
+/* ===== PRIVACY HEADER IMAGE ===== */
+
+.privacy-header {
+  text-align: center;
+  margin-bottom: 26px;
+}
+
+.privacy-banner {
+  max-width: 620px;
+  width: 100%;
+  margin-bottom: 18px;
+  filter:
+    drop-shadow(0 0 18px rgba(245,163,0,0.12))
+    drop-shadow(0 0 40px rgba(245,163,0,0.06));
+}
+
+/* ===== BACK BUTTON ===== */
+
+.home-button {
+  display: inline-block;
+  margin-top: 14px;
+  padding: 13px 26px;
+  border-radius: 999px;
+  text-decoration: none;
+  font-weight: 700;
+  font-size: 14px;
+
+  color: #111;
+  background: linear-gradient(
+    180deg,
+    #ffc34d,
+    #f5a300
+  );
+
+  box-shadow:
+    0 10px 28px rgba(245,163,0,0.25),
+    inset 0 1px 0 rgba(255,255,255,0.35);
+
+  transition:
+    transform .25s ease,
+    box-shadow .25s ease;
+}
+
+.home-button:hover {
+  transform: translateY(-2px);
+  box-shadow:
+    0 14px 34px rgba(245,163,0,0.32),
+    inset 0 1px 0 rgba(255,255,255,0.35);
+}
+
+.privacy-banner{
+  animation: logoFloat 6s ease-in-out infinite;
+}
