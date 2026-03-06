@@ -674,17 +674,48 @@ footer a:hover {
   display: block;
   width: fit-content;
   margin: 34px auto 6px;
-  padding: 13px 26px;
+  padding: 15px 26px;
+
   border-radius: 999px;
   text-decoration: none;
   font-weight: 700;
-  font-size: 14px;
+  font-size: 15px;
+
   color: #111;
-  background: linear-gradient(180deg, #ffc34d, #f5a300);
+  background: linear-gradient(180deg, var(--accent-2), var(--accent));
+
   box-shadow:
-    0 10px 28px rgba(245,163,0,0.25),
+    0 10px 28px var(--shadow),
     inset 0 1px 0 rgba(255,255,255,0.35);
-  transition: transform .25s ease, box-shadow .25s ease;
+
+  transition:
+    transform 0.25s ease,
+    box-shadow 0.25s ease;
+
+  position: relative;
+  overflow: hidden;
+}
+
+.home-button::after{
+  content:"";
+  position:absolute;
+  top:0;
+  left:-120%;
+  width:120%;
+  height:100%;
+
+  background:linear-gradient(
+    110deg,
+    transparent 0%,
+    rgba(255,255,255,0.4) 45%,
+    transparent 60%
+  );
+
+  transition:all .6s ease;
+}
+
+.home-button:hover::after{
+  left:120%;
 }
 
 .home-button:hover {
