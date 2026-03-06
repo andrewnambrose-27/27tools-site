@@ -1,1 +1,48 @@
+body {
+  font-family: Arial, sans-serif;
+  background: #0f172a;
+  color: white;
+  text-align: center;
+  margin: 0;
+}
 
+.container {
+  max-width: 700px;
+  margin: 120px auto;
+  padding: 20px;
+}
+
+h1 {
+  font-size: 42px;
+  margin-bottom: 10px;
+}
+
+.tagline {
+  font-size: 18px;
+  color: #94a3b8;
+  margin-bottom: 40px;
+}
+
+.app-link {
+  display: inline-block;
+  background: #22c55e;
+  color: black;
+  padding: 15px 25px;
+  border-radius: 8px;
+  text-decoration: none;
+  font-weight: bold;
+}
+
+.app-link:hover {
+  background: #16a34a;
+}
+
+footer {
+  margin-top: 80px;
+  font-size: 14px;
+}
+
+footer a {
+  color: #94a3b8;
+  text-decoration: none;
+}
