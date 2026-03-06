@@ -10,24 +10,27 @@
 
 <script>
 const glow = document.querySelector(".cursor-glow");
-const cardEl = document.getElementById("tilt-card");
+const card = document.getElementById("tilt-card");
 
 document.addEventListener("mousemove", e => {
+  if (!glow) return;
   glow.style.left = e.clientX + "px";
   glow.style.top = e.clientY + "px";
 });
 
-if (cardEl && glow) {
-  cardEl.addEventListener("mouseenter", () => {
-    glow.style.width = "380px";
-    glow.style.height = "380px";
-    glow.style.opacity = "0.95";
+if (card && glow) {
+  card.addEventListener("mouseenter", () => {
+    glow.style.width = "180px";
+    glow.style.height = "180px";
+    glow.style.opacity = "0.35";
+    glow.style.filter = "blur(28px)";
   });
 
-  cardEl.addEventListener("mouseleave", () => {
+  card.addEventListener("mouseleave", () => {
     glow.style.width = "320px";
     glow.style.height = "320px";
-    glow.style.opacity = "1";
+    glow.style.opacity = "0.9";
+    glow.style.filter = "blur(40px)";
   });
 }
 </script>
