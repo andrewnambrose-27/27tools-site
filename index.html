@@ -6,6 +6,23 @@
   <title>27Tools</title>
   <link rel="stylesheet" href="style.css" />
 </head>
+  <script>
+  (() => {
+    const endpoint = "https://analytics.27.tools/collect";
+
+    fetch(endpoint, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        path: location.pathname,
+        title: document.title,
+        referrer: document.referrer || "",
+        screen: `${window.screen.width}x${window.screen.height}`
+      }),
+      keepalive: true
+    }).catch(() => {});
+  })();
+</script>
 <body>
   <div class="cursor-glow"></div>
   <div class="particles"></div>
