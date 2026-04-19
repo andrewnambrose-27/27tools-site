@@ -82,7 +82,7 @@
     </div>
 
     <footer>
-      <p>© 2026 27Tools • Built by Andrew</p>
+      <p>&copy; 2026 27Tools - Built by Andrew</p>
     </footer>
   </div>
 
@@ -92,8 +92,8 @@
 
     document.addEventListener("mousemove", (e) => {
       if (!glow) return;
-      glow.style.left = e.clientX + "px";
-      glow.style.top = e.clientY + "px";
+      glow.style.left = `${e.clientX}px`;
+      glow.style.top = `${e.clientY}px`;
     });
 
     if (card) {
