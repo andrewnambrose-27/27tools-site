@@ -1,0 +1,491 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>PNG to WEBP | 27Tools</title>
+  <meta
+    name="description"
+    content="Convert PNG images to WEBP directly in your browser with batch support, quality control, and instant downloads."
+  />
+  <link rel="stylesheet" href="style.css" />
+</head>
+<script>
+(function () {
+  fetch("https://analytics.27tools.co/collect", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json"
+    },
+    body: JSON.stringify({
+      path: window.location.pathname
+    }),
+    keepalive: true
+  }).catch(() => {});
+})();
+</script>
+<body>
+  <div class="cursor-glow"></div>
+  <div class="particles"></div>
+
+  <div class="container tool-page-container">
+    <a href="index.html" class="back-link">Back to 27Tools</a>
+
+    <section class="hero-card tool-hero-card" id="tool-page-card">
+      <div class="tool-shell">
+        <div class="tool-shell-main">
+          <div class="tool-heading">
+            <div class="status-row tool-status-row">
+              <span class="status-pill">PNG to WEBP</span>
+              <span class="status-pill">Browser-powered</span>
+              <span class="status-pill">No upload needed</span>
+            </div>
+
+            <h1 class="tool-title">PNG to WEBP</h1>
+            <p class="tool-subtitle">
+              The desktop app experience, adapted for the web. Drop in PNG files,
+              choose your quality, convert them locally, and download the results.
+            </p>
+          </div>
+
+          <div class="tool-layout">
+            <aside class="tool-panel control-panel">
+              <div class="panel-block">
+                <p class="eyebrow">Conversion engine</p>
+                <div class="value-card">
+                  <strong>Browser canvas</strong>
+                  <span>Runs on your device, so images do not need to be uploaded to 27Tools.</span>
+                </div>
+              </div>
+
+              <div class="panel-block">
+                <label for="qualityRange" class="eyebrow">WEBP quality</label>
+                <div class="quality-card">
+                  <div class="quality-header">
+                    <strong id="qualityValue">82</strong>
+                    <span>Balanced quality and size</span>
+                  </div>
+                  <input type="range" id="qualityRange" min="40" max="100" step="1" value="82" />
+                </div>
+              </div>
+
+              <div class="panel-block">
+                <p class="eyebrow">Add PNG files</p>
+                <label class="dropzone" id="dropzone" for="fileInput">
+                  <input id="fileInput" type="file" accept=".png,image/png" multiple />
+                  <span class="dropzone-title">Drop PNGs here</span>
+                  <span class="dropzone-copy">or click to choose one or more files</span>
+                </label>
+              </div>
+
+              <div class="tool-actions">
+                <button type="button" class="app-link tool-button" id="convertButton" disabled>Convert to WEBP</button>
+                <button type="button" class="secondary-link tool-button secondary-button" id="clearButton">Clear queue</button>
+              </div>
+
+              <div class="panel-block">
+                <p class="eyebrow">Session summary</p>
+                <div class="stats-grid">
+                  <div class="stat-card">
+                    <span class="stat-label">Queued</span>
+                    <strong id="queuedCount">0</strong>
+                  </div>
+                  <div class="stat-card">
+                    <span class="stat-label">Converted</span>
+                    <strong id="convertedCount">0</strong>
+                  </div>
+                  <div class="stat-card">
+                    <span class="stat-label">Original</span>
+                    <strong id="originalSize">0 KB</strong>
+                  </div>
+                  <div class="stat-card">
+                    <span class="stat-label">WEBP</span>
+                    <strong id="convertedSize">0 KB</strong>
+                  </div>
+                </div>
+              </div>
+
+              <div class="panel-block">
+                <p class="eyebrow">About this tool</p>
+                <div class="note-card">
+                  <p>
+                    Best for transparent PNGs, screenshots, exported graphics, and website assets.
+                    Each file is converted locally in your browser for a simple, private workflow.
+                  </p>
+                </div>
+              </div>
+            </aside>
+
+            <div class="tool-panel workspace-panel">
+              <section class="panel-block">
+                <div class="section-head">
+                  <div>
+                    <p class="eyebrow">Queue</p>
+                    <h2>Files ready to convert</h2>
+                  </div>
+                  <span class="panel-hint">PNG files only</span>
+                </div>
+                <div class="list-surface" id="queueList">
+                  <div class="empty-state">
+                    <strong>No files in the queue yet</strong>
+                    <span>Add PNG files to begin.</span>
+                  </div>
+                </div>
+              </section>
+
+              <section class="panel-block">
+                <div class="section-head">
+                  <div>
+                    <p class="eyebrow">Results</p>
+                    <h2>Converted WEBP files</h2>
+                  </div>
+                  <button type="button" class="secondary-link mini-button" id="downloadAllButton" disabled>Download all</button>
+                </div>
+                <div class="list-surface results-surface" id="resultsList">
+                  <div class="empty-state">
+                    <strong>No conversions yet</strong>
+                    <span>Your WEBP downloads will appear here after conversion.</span>
+                  </div>
+                </div>
+              </section>
+
+              <section class="status-banner" id="statusBanner" aria-live="polite">
+                Add PNG files to get started.
+              </section>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <footer>
+      <p>&copy; 2026 27Tools - Built by Andrew</p>
+    </footer>
+  </div>
+
+  <script>
+    const glow = document.querySelector(".cursor-glow");
+    const card = document.getElementById("tool-page-card");
+    const fileInput = document.getElementById("fileInput");
+    const dropzone = document.getElementById("dropzone");
+    const qualityRange = document.getElementById("qualityRange");
+    const qualityValue = document.getElementById("qualityValue");
+    const convertButton = document.getElementById("convertButton");
+    const clearButton = document.getElementById("clearButton");
+    const downloadAllButton = document.getElementById("downloadAllButton");
+    const queueList = document.getElementById("queueList");
+    const resultsList = document.getElementById("resultsList");
+    const queuedCount = document.getElementById("queuedCount");
+    const convertedCount = document.getElementById("convertedCount");
+    const originalSize = document.getElementById("originalSize");
+    const convertedSize = document.getElementById("convertedSize");
+    const statusBanner = document.getElementById("statusBanner");
+
+    const queue = [];
+    const results = [];
+    let converting = false;
+
+    function formatBytes(bytes) {
+      if (!bytes) return "0 KB";
+      const units = ["B", "KB", "MB", "GB"];
+      let size = bytes;
+      let unitIndex = 0;
+
+      while (size >= 1024 && unitIndex < units.length - 1) {
+        size /= 1024;
+        unitIndex += 1;
+      }
+
+      return `${size.toFixed(size >= 10 || unitIndex === 0 ? 0 : 1)} ${units[unitIndex]}`;
+    }
+
+    function setStatus(message, tone) {
+      statusBanner.textContent = message;
+      statusBanner.dataset.tone = tone || "neutral";
+    }
+
+    function sanitizeName(name) {
+      return name.replace(/\.png$/i, "").replace(/[^\w.-]+/g, "-");
+    }
+
+    function updateSummary() {
+      const queuedFiles = queue.length;
+      const convertedFiles = results.length;
+      const originalTotal = queue.reduce((sum, item) => sum + item.file.size, 0);
+      const convertedTotal = results.reduce((sum, item) => sum + item.blob.size, 0);
+
+      queuedCount.textContent = String(queuedFiles);
+      convertedCount.textContent = String(convertedFiles);
+      originalSize.textContent = formatBytes(originalTotal);
+      convertedSize.textContent = formatBytes(convertedTotal);
+      convertButton.disabled = queuedFiles === 0 || converting;
+      downloadAllButton.disabled = convertedFiles === 0;
+    }
+
+    function renderQueue() {
+      if (queue.length === 0) {
+        queueList.innerHTML = `
+          <div class="empty-state">
+            <strong>No files in the queue yet</strong>
+            <span>Add PNG files to begin.</span>
+          </div>
+        `;
+        return;
+      }
+
+      queueList.innerHTML = queue.map((item, index) => `
+        <article class="file-row">
+          <div class="file-row-copy">
+            <strong>${item.file.name}</strong>
+            <span>${formatBytes(item.file.size)}</span>
+          </div>
+          <button type="button" class="row-remove" data-index="${index}" aria-label="Remove ${item.file.name}">x</button>
+        </article>
+      `).join("");
+    }
+
+    function renderResults() {
+      if (results.length === 0) {
+        resultsList.innerHTML = `
+          <div class="empty-state">
+            <strong>No conversions yet</strong>
+            <span>Your WEBP downloads will appear here after conversion.</span>
+          </div>
+        `;
+        return;
+      }
+
+      resultsList.innerHTML = results.map((item, index) => {
+        const saving = item.originalSize > 0
+          ? Math.round((1 - (item.blob.size / item.originalSize)) * 100)
+          : 0;
+
+        const summary = Number.isFinite(saving)
+          ? (saving > 0 ? `${saving}% smaller` : "Optimised")
+          : "Ready";
+
+        return `
+          <article class="result-row">
+            <div class="result-copy">
+              <strong>${item.name}</strong>
+              <span>${formatBytes(item.originalSize)} to ${formatBytes(item.blob.size)} - ${summary}</span>
+            </div>
+            <a class="app-link result-download" href="${item.url}" download="${item.name}">Download</a>
+            <button type="button" class="secondary-link mini-button result-remove" data-result-index="${index}">Remove</button>
+          </article>
+        `;
+      }).join("");
+    }
+
+    function refresh() {
+      renderQueue();
+      renderResults();
+      updateSummary();
+    }
+
+    function addFiles(fileList) {
+      const incoming = Array.from(fileList || []).filter((file) => file.type === "image/png" || /\.png$/i.test(file.name));
+      const existingKeys = new Set(queue.map((item) => `${item.file.name}-${item.file.size}-${item.file.lastModified}`));
+      let added = 0;
+
+      incoming.forEach((file) => {
+        const key = `${file.name}-${file.size}-${file.lastModified}`;
+        if (existingKeys.has(key)) {
+          return;
+        }
+
+        queue.push({ file, key });
+        existingKeys.add(key);
+        added += 1;
+      });
+
+      if (added > 0) {
+        setStatus(`${added} PNG file${added === 1 ? "" : "s"} added to the queue.`, "success");
+      } else if (fileList && fileList.length > 0) {
+        setStatus("Only new PNG files were added. Duplicates were skipped.", "neutral");
+      }
+
+      refresh();
+    }
+
+    function removeQueueItem(index) {
+      queue.splice(index, 1);
+      refresh();
+
+      if (queue.length === 0) {
+        setStatus("Queue cleared. Add PNG files to continue.", "neutral");
+      }
+    }
+
+    function removeResult(index) {
+      const removed = results.splice(index, 1)[0];
+      if (removed) {
+        URL.revokeObjectURL(removed.url);
+      }
+      refresh();
+    }
+
+    async function fileToWebp(file, quality) {
+      const bitmap = await createImageBitmap(file);
+
+      try {
+        const canvas = document.createElement("canvas");
+        canvas.width = bitmap.width;
+        canvas.height = bitmap.height;
+
+        const context = canvas.getContext("2d");
+        context.drawImage(bitmap, 0, 0);
+
+        return await new Promise((resolve, reject) => {
+          canvas.toBlob((generatedBlob) => {
+            if (generatedBlob) {
+              resolve(generatedBlob);
+            } else {
+              reject(new Error("WEBP conversion failed."));
+            }
+          }, "image/webp", quality);
+        });
+      } finally {
+        bitmap.close();
+      }
+    }
+
+    async function convertQueue() {
+      if (queue.length === 0 || converting) {
+        return;
+      }
+
+      converting = true;
+      convertButton.disabled = true;
+      convertButton.textContent = "Converting...";
+      setStatus(`Converting ${queue.length} file${queue.length === 1 ? "" : "s"} to WEBP...`, "neutral");
+
+      const quality = Number(qualityRange.value) / 100;
+      results.forEach((item) => URL.revokeObjectURL(item.url));
+      results.length = 0;
+
+      try {
+        for (const item of queue) {
+          const blob = await fileToWebp(item.file, quality);
+          const name = `${sanitizeName(item.file.name)}.webp`;
+          const url = URL.createObjectURL(blob);
+
+          results.push({
+            name,
+            blob,
+            url,
+            originalSize: item.file.size
+          });
+
+          renderResults();
+          updateSummary();
+        }
+
+        setStatus(`Converted ${results.length} file${results.length === 1 ? "" : "s"} to WEBP.`, "success");
+      } catch (error) {
+        console.error(error);
+        setStatus("Conversion hit a problem. Please try again with a different file.", "error");
+      } finally {
+        converting = false;
+        convertButton.textContent = "Convert to WEBP";
+        refresh();
+      }
+    }
+
+    async function downloadAll() {
+      if (results.length === 0) {
+        return;
+      }
+
+      setStatus(`Starting ${results.length} download${results.length === 1 ? "" : "s"}...`, "neutral");
+
+      for (let index = 0; index < results.length; index += 1) {
+        const item = results[index];
+        const anchor = document.createElement("a");
+        anchor.href = item.url;
+        anchor.download = item.name;
+        document.body.appendChild(anchor);
+        anchor.click();
+        anchor.remove();
+        await new Promise((resolve) => setTimeout(resolve, 140));
+      }
+
+      setStatus("Downloads started. If your browser asks for permission, allow multiple downloads.", "success");
+    }
+
+    document.addEventListener("mousemove", (e) => {
+      if (!glow) return;
+      glow.style.left = `${e.clientX}px`;
+      glow.style.top = `${e.clientY}px`;
+    });
+
+    if (card) {
+      card.addEventListener("mousemove", (e) => {
+        const rect = card.getBoundingClientRect();
+        const x = e.clientX - rect.left;
+        const y = e.clientY - rect.top;
+        const px = x / rect.width;
+        const py = y / rect.height;
+        const rotateY = (px - 0.5) * 1.3;
+        const rotateX = (0.5 - py) * 1.3;
+
+        card.style.transform = `rotateX(${rotateX}deg) rotateY(${rotateY}deg) translateY(-2px)`;
+        card.style.setProperty("--mx", `${px * 100}%`);
+        card.style.setProperty("--my", `${py * 100}%`);
+      });
+
+      card.addEventListener("mouseleave", () => {
+        card.style.transform = "rotateX(0deg) rotateY(0deg) translateY(0px)";
+        card.style.setProperty("--mx", "50%");
+        card.style.setProperty("--my", "50%");
+      });
+    }
+
+    qualityRange.addEventListener("input", () => {
+      qualityValue.textContent = qualityRange.value;
+    });
+
+    fileInput.addEventListener("change", (event) => {
+      addFiles(event.target.files);
+      fileInput.value = "";
+    });
+
+    dropzone.addEventListener("dragover", (event) => {
+      event.preventDefault();
+      dropzone.classList.add("is-dragging");
+    });
+
+    dropzone.addEventListener("dragleave", () => {
+      dropzone.classList.remove("is-dragging");
+    });
+
+    dropzone.addEventListener("drop", (event) => {
+      event.preventDefault();
+      dropzone.classList.remove("is-dragging");
+      addFiles(event.dataTransfer.files);
+    });
+
+    queueList.addEventListener("click", (event) => {
+      const button = event.target.closest("[data-index]");
+      if (!button) return;
+      removeQueueItem(Number(button.dataset.index));
+    });
+
+    resultsList.addEventListener("click", (event) => {
+      const button = event.target.closest("[data-result-index]");
+      if (!button) return;
+      removeResult(Number(button.dataset.resultIndex));
+    });
+
+    convertButton.addEventListener("click", convertQueue);
+    clearButton.addEventListener("click", () => {
+      queue.length = 0;
+      refresh();
+      setStatus("Queue cleared. Converted files remain available below.", "neutral");
+    });
+    downloadAllButton.addEventListener("click", downloadAll);
+
+    refresh();
+  </script>
+</body>
+</html>
