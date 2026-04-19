@@ -3,7 +3,11 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>27Tools</title>
+  <title>27Tools | Fast, Simple Online Tools</title>
+  <meta
+    name="description"
+    content="27Tools is a growing collection of fast, simple online tools. Try the PNG to WEBP converter and more."
+  />
   <link rel="stylesheet" href="style.css" />
 </head>
 <script>
@@ -27,24 +31,46 @@
   <div class="container">
     <div class="hero-card" id="tilt-card">
       <div class="status-row">
-        <span class="status-pill">Launching soon</span>
+        <span class="status-pill">Tool 01 live</span>
         <span class="status-pill">Simple tools, done well</span>
+        <span class="status-pill">Runs in your browser</span>
       </div>
 
       <img src="logo.png" alt="27Tools logo" class="logo" />
 
       <p class="tagline">
         A growing collection of useful tools, built to be fast, simple, and genuinely helpful.
+        Start with PNG to WEBP and convert images directly in your browser.
       </p>
 
       <div class="button-row">
-        <a href="#" class="app-link">Explore tools</a>
+        <a href="png-to-webp.html" class="app-link">Open PNG to WEBP</a>
         <a href="privacy.html" class="secondary-link">Privacy</a>
       </div>
     </div>
 
+    <section class="tool-grid" aria-label="Featured tools">
+      <article class="tool-card">
+        <div class="tool-card-top">
+          <span class="tool-badge">Featured Tool</span>
+          <span class="tool-format">PNG to WEBP</span>
+        </div>
+        <h2>Convert PNG files into lighter WEBP images</h2>
+        <p>
+          Drag in one file or a whole batch, adjust quality, preview file sizes,
+          and download converted WEBP images without leaving the browser.
+        </p>
+        <div class="tool-meta">
+          <span>Batch conversion</span>
+          <span>No upload required</span>
+          <span>Fast downloads</span>
+        </div>
+        <a href="png-to-webp.html" class="tool-link">Launch tool</a>
+      </article>
+    </section>
+
     <footer>
-      <p>© 2026 27Tools • Built by Andrew</p>
+      <p>&copy; 2026 27Tools - Built by Andrew</p>
     </footer>
   </div>
 
@@ -55,20 +81,17 @@
     document.addEventListener("mousemove", (e) => {
       if (!glow) return;
 
-      glow.style.left = e.clientX + "px";
-      glow.style.top = e.clientY + "px";
+      glow.style.left = `${e.clientX}px`;
+      glow.style.top = `${e.clientY}px`;
     });
 
     if (card) {
       card.addEventListener("mousemove", (e) => {
         const rect = card.getBoundingClientRect();
-
         const x = e.clientX - rect.left;
         const y = e.clientY - rect.top;
-
         const px = x / rect.width;
         const py = y / rect.height;
-
         const rotateY = (px - 0.5) * 3;
         const rotateX = (0.5 - py) * 3;
 
