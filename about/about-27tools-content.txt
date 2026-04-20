@@ -1,1 +1,33 @@
+27tools started as a simple idea. Build small tools that actually make life easier.
 
+No unnecessary steps. No overcomplicated interfaces.
+
+Just tools that do what they say, quickly and clearly.
+
+## The thinking behind it
+There are thousands of tools online, but most of them:
+
+- Feel bloated
+- Are filled with distractions
+- Or just do not work that well
+
+27tools is about fixing that.
+
+Each tool is designed to be:
+
+- Fast
+- Simple
+- Easy to use
+- Actually useful
+
+If something can be done in one step, it should be.
+
+## Built by one person
+27tools is an independent project, built alongside other work, slowly, carefully, and with a focus on getting things right.
+
+Every tool is something I have either needed myself or know people will use regularly.
+
+## The goal
+To build a collection of tools people genuinely rely on.
+
+If a tool saves you time, even once, it has done its job.
