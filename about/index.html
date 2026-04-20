@@ -1,1 +1,197 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>About 27Tools</title>
+  <meta
+    name="description"
+    content="Learn more about 27Tools, the thinking behind it, and the goal of building useful tools that are fast and simple."
+  />
+  <link rel="stylesheet" href="/style.css" />
+</head>
+<script>
+(function () {
+  fetch("https://analytics.27tools.co/collect", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json"
+    },
+    body: JSON.stringify({
+      path: window.location.pathname
+    }),
+    keepalive: true
+  }).catch(() => {});
+})();
+</script>
+<body>
+  <div class="cursor-glow"></div>
+  <div class="particles"></div>
+  <nav class="site-menu">
+    <button class="menu-toggle" type="button" aria-expanded="false" aria-controls="menuPanel">
+      <span></span>
+      <span></span>
+      <span></span>
+      <span class="sr-only">Open navigation menu</span>
+    </button>
+    <div class="menu-panel" id="menuPanel">
+      <a href="/" class="menu-link">Home</a>
+      <a href="/about/" class="menu-link">About Us</a>
+      <a href="/privacy/" class="menu-link">Privacy Policy</a>
+      <details class="menu-group">
+        <summary class="menu-link menu-parent">Tools</summary>
+        <div class="submenu">
+          <a href="/tools/png-to-webp/" class="submenu-link">PNG to WEBP</a>
+        </div>
+      </details>
+    </div>
+  </nav>
 
+  <div class="container about-container">
+    <section class="hero-card about-card" id="about-card">
+      <div class="about-banner-wrap">
+        <img src="/about-us-banner.webp" alt="About 27Tools banner" class="about-banner" />
+        <img src="/about-27tools.png" alt="About 27Tools" class="about-title-image" />
+      </div>
+
+      <div class="about-content" id="aboutContent">
+        <div class="about-loading">Loading content...</div>
+      </div>
+    </section>
+
+    <footer>
+      <p>&copy; 2026 27Tools - Built by Andrew</p>
+    </footer>
+  </div>
+
+  <script>
+    const glow = document.querySelector(".cursor-glow");
+    const card = document.getElementById("about-card");
+    const menuToggle = document.querySelector(".menu-toggle");
+    const menuPanel = document.getElementById("menuPanel");
+    const aboutContent = document.getElementById("aboutContent");
+
+    function escapeHtml(text) {
+      return text
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
+        .replace(/"/g, "&quot;")
+        .replace(/'/g, "&#39;");
+    }
+
+    function renderAboutText(rawText) {
+      const lines = rawText.split(/\r?\n/);
+      const html = [];
+      let paragraphLines = [];
+      let listItems = [];
+
+      function flushParagraph() {
+        if (paragraphLines.length === 0) return;
+        html.push(`<p>${escapeHtml(paragraphLines.join(" "))}</p>`);
+        paragraphLines = [];
+      }
+
+      function flushList() {
+        if (listItems.length === 0) return;
+        html.push("<ul>");
+        listItems.forEach((item) => {
+          html.push(`<li>${escapeHtml(item)}</li>`);
+        });
+        html.push("</ul>");
+        listItems = [];
+      }
+
+      lines.forEach((line) => {
+        const trimmed = line.trim();
+
+        if (!trimmed) {
+          flushParagraph();
+          flushList();
+          return;
+        }
+
+        if (trimmed.startsWith("## ")) {
+          flushParagraph();
+          flushList();
+          html.push(`<h2 class="about-heading">${escapeHtml(trimmed.slice(3))}</h2>`);
+          return;
+        }
+
+        if (trimmed.startsWith("- ")) {
+          flushParagraph();
+          listItems.push(trimmed.slice(2));
+          return;
+        }
+
+        flushList();
+        paragraphLines.push(trimmed);
+      });
+
+      flushParagraph();
+      flushList();
+
+      return html.join("");
+    }
+
+    fetch("./about-27tools-content.txt")
+      .then((response) => {
+        if (!response.ok) {
+          throw new Error("Unable to load about page content.");
+        }
+        return response.text();
+      })
+      .then((text) => {
+        aboutContent.innerHTML = renderAboutText(text);
+      })
+      .catch(() => {
+        aboutContent.innerHTML = `
+          <p>About content could not be loaded right now.</p>
+          <p>You can add or edit the page text in <code>about-27tools-content.txt</code>.</p>
+        `;
+      });
+
+    document.addEventListener("mousemove", (e) => {
+      if (!glow) return;
+      glow.style.left = `${e.clientX}px`;
+      glow.style.top = `${e.clientY}px`;
+    });
+
+    if (card) {
+      card.addEventListener("mousemove", (e) => {
+        const rect = card.getBoundingClientRect();
+        const x = e.clientX - rect.left;
+        const y = e.clientY - rect.top;
+        const px = x / rect.width;
+        const py = y / rect.height;
+        const rotateY = (px - 0.5) * 2.1;
+        const rotateX = (0.5 - py) * 2.1;
+
+        card.style.transform = `rotateX(${rotateX}deg) rotateY(${rotateY}deg) translateY(-2px)`;
+        card.style.setProperty("--mx", `${px * 100}%`);
+        card.style.setProperty("--my", `${py * 100}%`);
+      });
+
+      card.addEventListener("mouseleave", () => {
+        card.style.transform = "rotateX(0deg) rotateY(0deg) translateY(0px)";
+        card.style.setProperty("--mx", "50%");
+        card.style.setProperty("--my", "50%");
+      });
+    }
+
+    if (menuToggle && menuPanel) {
+      menuToggle.addEventListener("click", () => {
+        const isOpen = menuPanel.classList.toggle("is-open");
+        menuToggle.setAttribute("aria-expanded", String(isOpen));
+      });
+
+      document.addEventListener("click", (event) => {
+        if (!menuPanel.classList.contains("is-open")) return;
+        if (event.target.closest(".site-menu")) return;
+        menuPanel.classList.remove("is-open");
+        menuToggle.setAttribute("aria-expanded", "false");
+      });
+    }
+  </script>
+</body>
+</html>
