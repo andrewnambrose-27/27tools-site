@@ -457,6 +457,13 @@ body::after {
   line-height: 1.6;
 }
 
+.upload-limits-note {
+  margin: 0;
+  color: #aeb7c2;
+  font-size: 13px;
+  line-height: 1.6;
+}
+
 .tool-actions {
   display: grid;
   gap: 12px;
