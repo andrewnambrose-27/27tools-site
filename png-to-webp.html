@@ -1,8 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <link rel="icon" href="/favicon.ico">
-  <link rel="apple-touch-icon" href="/apple-touch-icon.png">
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>PNG to WEBP | 27Tools</title>
@@ -29,9 +27,29 @@
 <body>
   <div class="cursor-glow"></div>
   <div class="particles"></div>
+  <nav class="site-menu">
+    <button class="menu-toggle" type="button" aria-expanded="false" aria-controls="menuPanel">
+      <span></span>
+      <span></span>
+      <span></span>
+      <span class="sr-only">Open navigation menu</span>
+    </button>
+    <div class="menu-panel" id="menuPanel">
+      <a href="index.html" class="menu-link">Home</a>
+      <a href="privacy.html" class="menu-link">Privacy Policy</a>
+      <details class="menu-group">
+        <summary class="menu-link menu-parent">Tools</summary>
+        <div class="submenu">
+          <a href="png-to-webp.html" class="submenu-link">PNG to WEBP</a>
+        </div>
+      </details>
+    </div>
+  </nav>
 
   <div class="container tool-page-container">
-    <a href="index.html" class="back-link">Back to 27Tools</a>
+    <a href="index.html" class="tool-page-brand" aria-label="Go to 27Tools home">
+      <img src="logo.png" alt="27Tools logo" class="tool-page-brand-image" />
+    </a>
 
     <section class="hero-card tool-hero-card" id="tool-page-card">
       <div class="tool-shell">
@@ -43,7 +61,7 @@
               <span class="status-pill">No upload needed</span>
             </div>
 
-            <h1 class="tool-title">PNG to WEBP</h1>
+            <img src="png-to-webp.png" alt="PNG to WEBP" class="tool-title-image" />
             <p class="tool-subtitle">
               The desktop app experience, adapted for the web. Drop in PNG files,
               choose your quality, convert them locally, and download the results.
@@ -161,13 +179,15 @@
     </section>
 
     <footer>
-      <p>&copy; 2026 27Tools - Built by 27tools</p>
+      <p>&copy; 2026 27Tools - Built by Andrew</p>
     </footer>
   </div>
 
   <script>
     const glow = document.querySelector(".cursor-glow");
     const card = document.getElementById("tool-page-card");
+    const menuToggle = document.querySelector(".menu-toggle");
+    const menuPanel = document.getElementById("menuPanel");
     const fileInput = document.getElementById("fileInput");
     const dropzone = document.getElementById("dropzone");
     const qualityRange = document.getElementById("qualityRange");
@@ -440,6 +460,20 @@
         card.style.transform = "rotateX(0deg) rotateY(0deg) translateY(0px)";
         card.style.setProperty("--mx", "50%");
         card.style.setProperty("--my", "50%");
+      });
+    }
+
+    if (menuToggle && menuPanel) {
+      menuToggle.addEventListener("click", () => {
+        const isOpen = menuPanel.classList.toggle("is-open");
+        menuToggle.setAttribute("aria-expanded", String(isOpen));
+      });
+
+      document.addEventListener("click", (event) => {
+        if (!menuPanel.classList.contains("is-open")) return;
+        if (event.target.closest(".site-menu")) return;
+        menuPanel.classList.remove("is-open");
+        menuToggle.setAttribute("aria-expanded", "false");
       });
     }
 
