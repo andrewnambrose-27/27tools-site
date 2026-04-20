@@ -443,6 +443,24 @@
       glow.style.top = `${e.clientY}px`;
     });
 
+    if (card) {
+      card.addEventListener("mouseenter", () => {
+        if (!glow) return;
+        glow.style.width = "420px";
+        glow.style.height = "420px";
+        glow.style.opacity = "0.55";
+        glow.style.filter = "blur(58px)";
+      });
+
+      card.addEventListener("mouseleave", () => {
+        if (!glow) return;
+        glow.style.width = "320px";
+        glow.style.height = "320px";
+        glow.style.opacity = "0.9";
+        glow.style.filter = "blur(40px)";
+      });
+    }
+
     if (menuToggle && menuPanel) {
       menuToggle.addEventListener("click", () => {
         const isOpen = menuPanel.classList.toggle("is-open");
