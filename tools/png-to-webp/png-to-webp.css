@@ -664,6 +664,16 @@ footer {
   text-align: center;
 }
 
+.footer-inline-link {
+  color: #8d97a3;
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+
+.footer-inline-link:hover {
+  color: var(--accent-2);
+}
+
 @keyframes drift {
   0% {
     transform: translate3d(-2%, -1%, 0) scale(1);
