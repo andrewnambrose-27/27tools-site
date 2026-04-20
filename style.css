@@ -1359,6 +1359,10 @@ input[type="range"] {
   margin-bottom: 74px;
   border-radius: 24px 24px 0 0;
   overflow: hidden;
+  aspect-ratio: 16 / 7;
+  background:
+    linear-gradient(180deg, rgba(255,255,255,0.04), rgba(255,255,255,0.01)),
+    rgba(18, 18, 18, 0.92);
 }
 
 .about-banner-wrap::after {
@@ -1373,8 +1377,7 @@ input[type="range"] {
 .about-banner {
   display: block;
   width: 100%;
-  min-height: 280px;
-  max-height: 420px;
+  height: 100%;
   object-fit: cover;
   filter:
     saturate(0.94)
@@ -1386,7 +1389,7 @@ input[type="range"] {
   position: absolute;
   left: 50%;
   bottom: -34px;
-  width: min(460px, 74%);
+  width: min(230px, 42%);
   transform: translateX(-50%);
   z-index: 2;
   filter:
@@ -1399,6 +1402,7 @@ input[type="range"] {
   color: #d7dde4;
   font-size: 17px;
   line-height: 1.8;
+  text-align: left;
 }
 
 .about-loading {
@@ -1461,11 +1465,11 @@ input[type="range"] {
   }
 
   .about-banner {
-    min-height: 220px;
+    height: 100%;
   }
 
   .about-title-image {
-    width: min(340px, 82%);
+    width: min(180px, 46%);
     bottom: -22px;
   }
 
