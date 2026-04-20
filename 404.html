@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Page Not Found | 27Tools</title>
+  <meta name="robots" content="noindex" />
+  <link rel="stylesheet" href="/style.css" />
+  <script src="/site-analytics.js" defer></script>
+</head>
+<body>
+  <div class="cursor-glow"></div>
+  <div class="particles"></div>
+  <nav class="site-menu">
+    <button class="menu-toggle" type="button" aria-expanded="false" aria-controls="menuPanel">
+      <span></span>
+      <span></span>
+      <span></span>
+      <span class="sr-only">Open navigation menu</span>
+    </button>
+    <div class="menu-panel" id="menuPanel">
+      <a href="/" class="menu-link">Home</a>
+      <a href="/about/" class="menu-link">About Us</a>
+      <a href="/privacy/" class="menu-link">Privacy Policy</a>
+      <details class="menu-group">
+        <summary class="menu-link menu-parent">Tools</summary>
+        <div class="submenu">
+          <a href="/tools/png-to-webp/" class="submenu-link">PNG to WEBP</a>
+          <a href="/tools/camera-shutter-count/" class="submenu-link">Sony Shutter Count Tool</a>
+        </div>
+      </details>
+    </div>
+  </nav>
+
+  <div class="container not-found-container">
+    <section class="hero-card not-found-card" id="notFoundCard">
+      <div class="status-row">
+        <span class="status-pill">404 page</span>
+        <span class="status-pill">27Tools</span>
+      </div>
+
+      <img src="/logo.png" alt="27Tools logo" class="logo not-found-logo" />
+
+      <p class="not-found-code">Error 404</p>
+      <h1 class="not-found-title">Oops</h1>
+      <p class="not-found-copy">Oops, something has gone wrong with the website.</p>
+
+      <div class="button-row">
+        <a href="/" class="app-link">Go home</a>
+        <a href="/tools/png-to-webp/" class="secondary-link">Open a tool</a>
+      </div>
+    </section>
+
+    <footer>
+      <p>&copy; 2026 27Tools - Built by 27Tools - <a href="/about/" class="footer-inline-link">About</a> - <a href="/privacy/" class="footer-inline-link">Privacy</a></p>
+    </footer>
+  </div>
+
+  <script>
+    const glow = document.querySelector(".cursor-glow");
+    const card = document.getElementById("notFoundCard");
+    const menuToggle = document.querySelector(".menu-toggle");
+    const menuPanel = document.getElementById("menuPanel");
+
+    document.addEventListener("mousemove", (e) => {
+      if (!glow) return;
+      glow.style.left = `${e.clientX}px`;
+      glow.style.top = `${e.clientY}px`;
+    });
+
+    if (card) {
+      card.addEventListener("mousemove", (e) => {
+        const rect = card.getBoundingClientRect();
+        const x = e.clientX - rect.left;
+        const y = e.clientY - rect.top;
+        const px = x / rect.width;
+        const py = y / rect.height;
+        const rotateY = (px - 0.5) * 1.1;
+        const rotateX = (0.5 - py) * 1.1;
+
+        card.style.transform = `rotateX(${rotateX}deg) rotateY(${rotateY}deg) translateY(-1px)`;
+        card.style.setProperty("--mx", `${px * 100}%`);
+        card.style.setProperty("--my", `${py * 100}%`);
+      });
+
+      card.addEventListener("mouseenter", () => {
+        if (!glow) return;
+        glow.style.width = "420px";
+        glow.style.height = "420px";
+        glow.style.opacity = "0.55";
+        glow.style.filter = "blur(58px)";
+      });
+
+      card.addEventListener("mouseleave", () => {
+        if (glow) {
+          glow.style.width = "320px";
+          glow.style.height = "320px";
+          glow.style.opacity = "0.9";
+          glow.style.filter = "blur(40px)";
+        }
+
+        card.style.transform = "rotateX(0deg) rotateY(0deg) translateY(0px)";
+      });
+    }
+
+    if (menuToggle && menuPanel) {
+      menuToggle.addEventListener("click", () => {
+        const isOpen = menuPanel.classList.toggle("is-open");
+        menuToggle.setAttribute("aria-expanded", String(isOpen));
+      });
+
+      document.addEventListener("click", (event) => {
+        if (!menuPanel.classList.contains("is-open")) return;
+        if (event.target.closest(".site-menu")) return;
+        menuPanel.classList.remove("is-open");
+        menuToggle.setAttribute("aria-expanded", "false");
+      });
+    }
+  </script>
+</body>
+</html>
