@@ -93,7 +93,7 @@
                   <span class="dropzone-copy">or click to choose one original Sony camera file</span>
                   <span class="dropzone-types">Supports Sony JPG, JPEG, and ARW files</span>
                 </label>
-                <p class="upload-limits-note">Original Sony JPG or ARW only - 30 scans per day per user</p>
+                <p class="upload-limits-note">Original Sony JPG or ARW only - 30 scans per day per browser</p>
               </div>
 
               <div class="tool-actions">
@@ -127,7 +127,7 @@
                 <p class="eyebrow">Daily limit</p>
                 <div class="value-card">
                   <strong id="dailyLimitValue">30 remaining</strong>
-                  <span>Your daily allowance of the tool resets each day.</span>
+                  <span>Soft protection stored in this browser. It resets each day.</span>
                 </div>
               </div>
 
@@ -300,6 +300,15 @@
       statusBanner.dataset.tone = tone || "neutral";
     }
 
+    function escapeHtml(text) {
+      return String(text)
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
+        .replace(/"/g, "&quot;")
+        .replace(/'/g, "&#39;");
+    }
+
     function resetResult() {
       parsedResult = null;
       parsedExif = null;
@@ -340,18 +349,21 @@
       const extension = selectedFile.name.includes(".")
         ? selectedFile.name.split(".").pop().toUpperCase()
         : "FILE";
+      const safeFileName = escapeHtml(selectedFile.name);
+      const safeFileType = escapeHtml(selectedFile.type || extension);
+      const safeExtension = escapeHtml(extension);
 
       fileSurface.innerHTML = `
         <div class="result-summary">
           <div class="meta-card">
             <span class="eyebrow">Loaded file</span>
-            <strong>${selectedFile.name}</strong>
-            <span>${formatBytes(selectedFile.size)} - ${selectedFile.type || extension}</span>
+            <strong>${safeFileName}</strong>
+            <span>${formatBytes(selectedFile.size)} - ${safeFileType}</span>
           </div>
           <div class="tag-list">
             <span class="tag-chip">Original file recommended</span>
             <span class="tag-chip">Metadata scanned locally</span>
-            <span class="tag-chip">${extension}</span>
+            <span class="tag-chip">${safeExtension}</span>
           </div>
         </div>
       `;
@@ -653,13 +665,14 @@
         : result.metadataFound
           ? "Metadata was found, but the shutter count field was not available in this file."
           : "This file did not expose the camera maker-note data needed for a shutter count.";
+      const safeSourceTag = escapeHtml(result.sourceTag || "");
 
       const countMarkup = result.shutterCount
         ? `
           <div class="hero-result">
             <span class="hero-result-label">Estimated shutter count</span>
             <strong class="hero-result-value">${result.shutterCount.toLocaleString()}</strong>
-            <span class="hero-result-note">Source tag: ${result.sourceTag}</span>
+            <span class="hero-result-note">Source tag: ${safeSourceTag}</span>
           </div>
         `
         : `
@@ -674,6 +687,10 @@
       const model = result.model || "Unknown";
       const capturedAt = result.capturedAt || "Unknown";
       const software = result.software || "Not listed";
+      const safeMake = escapeHtml(make);
+      const safeModel = escapeHtml(model);
+      const safeCapturedAt = escapeHtml(capturedAt);
+      const safeSoftware = escapeHtml(software);
 
       resultSurface.innerHTML = `
         <div class="result-summary">
@@ -684,22 +701,22 @@
           <div class="meta-grid">
             <div class="meta-card">
               <span class="eyebrow">Camera make</span>
-              <strong>${make}</strong>
+              <strong>${safeMake}</strong>
               <span>Read from file metadata</span>
             </div>
             <div class="meta-card">
               <span class="eyebrow">Camera model</span>
-              <strong>${model}</strong>
+              <strong>${safeModel}</strong>
               <span>Useful for confirming the file source</span>
             </div>
             <div class="meta-card">
               <span class="eyebrow">Captured</span>
-              <strong>${capturedAt}</strong>
+              <strong>${safeCapturedAt}</strong>
               <span>Best results usually come from the latest image on the camera</span>
             </div>
             <div class="meta-card">
               <span class="eyebrow">Software tag</span>
-              <strong>${software}</strong>
+              <strong>${safeSoftware}</strong>
               <span>If this shows editor software, metadata may have been changed</span>
             </div>
           </div>
