@@ -253,34 +253,21 @@ body::after {
 }
 
 .hero-card::before {
-  content: "";
-  position: absolute;
-  inset: -80px;
-  border-radius: 36px;
-  background: radial-gradient(circle at var(--mx, 50%) var(--my, 50%), rgba(245, 163, 0, 0.18) 0%, rgba(245, 163, 0, 0.08) 22%, rgba(245, 163, 0, 0.03) 40%, transparent 65%);
-  filter: blur(40px);
+  content: none;
   opacity: 0;
-  z-index: -1;
-  transition: opacity 0.25s ease;
 }
 
 .hero-card:hover::before {
-  opacity: 1;
+  opacity: 0;
 }
 
 .hero-card::after {
-  content: "";
-  position: absolute;
-  inset: 0;
-  border-radius: 24px;
-  background: radial-gradient(500px circle at var(--mx, 50%) var(--my, 50%), rgba(255, 185, 60, 0.05) 0%, rgba(255, 185, 60, 0.025) 24%, rgba(255, 255, 255, 0.02) 40%, transparent 62%);
+  content: none;
   opacity: 0;
-  transition: opacity 0.25s ease;
-  pointer-events: none;
 }
 
 .hero-card:hover::after {
-  opacity: 1;
+  opacity: 0;
 }
 
 .hero-card > * {
