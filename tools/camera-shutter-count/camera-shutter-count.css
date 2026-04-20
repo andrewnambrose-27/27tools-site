@@ -397,6 +397,7 @@ body::after {
 .note-card,
 .meta-card,
 .result-card,
+.exif-card,
 .list-surface,
 .status-banner,
 .dropzone {
@@ -573,9 +574,19 @@ button:disabled {
   min-height: 100%;
 }
 
+.exif-card {
+  overflow: hidden;
+}
+
 .result-summary {
   display: grid;
   gap: 18px;
+}
+
+.mini-button {
+  min-height: 44px;
+  padding: 10px 14px;
+  font-size: 14px;
 }
 
 .hero-result {
@@ -639,6 +650,20 @@ button:disabled {
   display: flex;
   flex-wrap: wrap;
   gap: 10px;
+}
+
+.exif-pre {
+  margin: 0;
+  padding: 18px;
+  border-radius: 18px;
+  border: 1px solid rgba(255,255,255,0.08);
+  background: rgba(6, 7, 9, 0.52);
+  color: #e7edf3;
+  font: 13px/1.65 Consolas, "Courier New", monospace;
+  white-space: pre-wrap;
+  word-break: break-word;
+  max-height: 560px;
+  overflow: auto;
 }
 
 .tag-chip {
