@@ -93,6 +93,7 @@
                   <span class="dropzone-copy">or click to choose one original Sony camera file</span>
                   <span class="dropzone-types">Supports Sony JPG, JPEG, and ARW files</span>
                 </label>
+                <p class="upload-limits-note">Original Sony JPG or ARW only - 30 scans per day per browser</p>
               </div>
 
               <div class="tool-actions">
@@ -123,12 +124,21 @@
               </div>
 
               <div class="panel-block">
+                <p class="eyebrow">Daily limit</p>
+                <div class="value-card">
+                  <strong id="dailyLimitValue">30 remaining</strong>
+                  <span>Soft protection stored in this browser. It resets each day.</span>
+                </div>
+              </div>
+
+              <div class="panel-block">
                 <p class="eyebrow">About this tool</p>
                 <div class="note-card">
                   <p>
                     This tool runs in your browser and is aimed at Sony maker-note metadata,
                     including files from cameras like the A7 III. If the metadata has already been
                     stripped, the page will tell you and suggest using a different original file.
+                    A daily browser limit helps reduce casual spam and bot use.
                   </p>
                 </div>
               </div>
@@ -216,6 +226,7 @@
     const fileSize = document.getElementById("fileSize");
     const scanState = document.getElementById("scanState");
     const resultState = document.getElementById("resultState");
+    const dailyLimitValue = document.getElementById("dailyLimitValue");
 
     const SONY_DECIPHER_MAP = (() => {
       const map = new Map();
@@ -226,11 +237,49 @@
 
       return map;
     })();
+    const DAILY_SCAN_LIMIT = 30;
+    const LIMIT_STORAGE_KEY = "sonyShutterCountDailyLimit";
 
     let selectedFile = null;
     let parsedResult = null;
     let parsedExif = null;
     let scanning = false;
+
+    function getTodayKey() {
+      const now = new Date();
+      const year = now.getFullYear();
+      const month = String(now.getMonth() + 1).padStart(2, "0");
+      const day = String(now.getDate()).padStart(2, "0");
+      return `${year}-${month}-${day}`;
+    }
+
+    function getLimitState() {
+      const today = getTodayKey();
+
+      try {
+        const parsed = JSON.parse(localStorage.getItem(LIMIT_STORAGE_KEY) || "{}");
+        if (parsed.date === today && Number.isFinite(parsed.count)) {
+          return parsed;
+        }
+      } catch (error) {
+        console.warn("Daily limit state could not be read.", error);
+      }
+
+      return { date: today, count: 0 };
+    }
+
+    function saveLimitState(state) {
+      localStorage.setItem(LIMIT_STORAGE_KEY, JSON.stringify(state));
+    }
+
+    function getRemainingLimit() {
+      const state = getLimitState();
+      return Math.max(0, DAILY_SCAN_LIMIT - state.count);
+    }
+
+    function refreshLimitDisplay() {
+      dailyLimitValue.textContent = `${getRemainingLimit()} remaining`;
+    }
 
     function formatBytes(bytes) {
       if (!bytes) return "0 KB";
@@ -274,7 +323,7 @@
       fileCount.textContent = selectedFile ? "1" : "0";
       fileSize.textContent = selectedFile ? formatBytes(selectedFile.size) : "0 KB";
       scanState.textContent = scanning ? "Scanning" : selectedFile ? "Ready" : "Waiting";
-      analyzeButton.disabled = !selectedFile || scanning;
+      analyzeButton.disabled = !selectedFile || scanning || getRemainingLimit() === 0;
     }
 
     function renderFileSurface() {
@@ -762,6 +811,13 @@
     async function analyzeFile() {
       if (!selectedFile || scanning) return;
 
+      const remainingLimit = getRemainingLimit();
+      if (remainingLimit <= 0) {
+        setStatus("Daily browser limit reached. Please try again tomorrow.", "danger");
+        updateSummary();
+        return;
+      }
+
       scanning = true;
       updateSummary();
       setStatus(`Scanning ${selectedFile.name} for shutter count metadata...`, "warning");
@@ -808,6 +864,12 @@
         renderResult(parsedResult);
         renderExifData(tags);
         resultState.textContent = parsedResult.shutterCount ? "Found" : "Needs another file";
+
+        const limitState = getLimitState();
+        limitState.count += 1;
+        saveLimitState(limitState);
+        refreshLimitDisplay();
+        updateSummary();
 
         if (parsedResult.shutterCount) {
           setStatus(
@@ -938,6 +1000,7 @@
       }
     });
 
+    refreshLimitDisplay();
     updateSummary();
   </script>
 </body>
