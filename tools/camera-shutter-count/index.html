@@ -199,6 +199,16 @@
     const scanState = document.getElementById("scanState");
     const resultState = document.getElementById("resultState");
 
+    const SONY_DECIPHER_MAP = (() => {
+      const map = new Map();
+
+      for (let value = 0; value <= 248; value += 1) {
+        map.set((value * value * value) % 249, value);
+      }
+
+      return map;
+    })();
+
     let selectedFile = null;
     let parsedResult = null;
     let scanning = false;
@@ -271,98 +281,293 @@
       `;
     }
 
-    function findCandidateNumbers(value, path = "", seen = new WeakSet()) {
-      const candidates = [];
-
-      if (value === null || value === undefined) {
-        return candidates;
+    function getTypeSize(type) {
+      switch (type) {
+        case 1:
+        case 2:
+        case 6:
+        case 7:
+          return 1;
+        case 3:
+        case 8:
+          return 2;
+        case 4:
+        case 9:
+        case 11:
+          return 4;
+        case 5:
+        case 10:
+        case 12:
+          return 8;
+        default:
+          return 0;
       }
-
-      const type = typeof value;
-
-      if (type === "number" && Number.isFinite(value)) {
-        const normalizedPath = String(path || "value").toLowerCase();
-        if (normalizedPath.includes("count") || normalizedPath.includes("shutter") || normalizedPath.includes("image")) {
-          candidates.push({ path: path || "value", value });
-        }
-        return candidates;
-      }
-
-      if (type === "string") {
-        const normalizedPath = String(path || "value").toLowerCase();
-        const numeric = Number(value);
-        if (Number.isFinite(numeric) && (normalizedPath.includes("count") || normalizedPath.includes("shutter"))) {
-          candidates.push({ path: path || "value", value: numeric });
-        }
-        return candidates;
-      }
-
-      if (type !== "object") {
-        return candidates;
-      }
-
-      if (seen.has(value)) {
-        return candidates;
-      }
-      seen.add(value);
-
-      if (Array.isArray(value)) {
-        value.forEach((item, index) => {
-          candidates.push(...findCandidateNumbers(item, `${path}[${index}]`, seen));
-        });
-        return candidates;
-      }
-
-      Object.entries(value).forEach(([key, nested]) => {
-        const nextPath = path ? `${path}.${key}` : key;
-        const normalizedKey = key.toLowerCase();
-
-        if ((normalizedKey.includes("imagecount") || normalizedKey.includes("shuttercount")) && typeof nested === "number") {
-          candidates.push({ path: nextPath, value: nested });
-          return;
-        }
-
-        candidates.push(...findCandidateNumbers(nested, nextPath, seen));
-      });
-
-      return candidates;
     }
 
-    function pickBestCount(tags) {
-      const exactKeyMatches = [];
+    function extractTiffView(buffer) {
+      const view = new DataView(buffer);
 
-      Object.entries(tags || {}).forEach(([key, value]) => {
-        const normalizedKey = key.toLowerCase();
-        const numericValue = typeof value === "number" ? value : Number(value);
-        if (!Number.isFinite(numericValue)) return;
-
-        if (normalizedKey === "imagecount" || normalizedKey === "shuttercount") {
-          exactKeyMatches.push({ path: key, value: numericValue });
+      if (view.byteLength >= 4) {
+        const signature = String.fromCharCode(view.getUint8(0), view.getUint8(1), view.getUint8(2), view.getUint8(3));
+        if (signature === "II*\u0000" || signature === "MM\u0000*") {
+          return { view, baseOffset: 0 };
         }
-      });
+      }
 
-      const candidates = exactKeyMatches.length > 0
-        ? exactKeyMatches
-        : findCandidateNumbers(tags).filter((candidate) => candidate.value > 0 && Number.isInteger(candidate.value));
+      if (view.byteLength >= 4 && view.getUint8(0) === 0xff && view.getUint8(1) === 0xd8) {
+        let offset = 2;
 
-      if (candidates.length === 0) {
+        while (offset + 4 <= view.byteLength) {
+          if (view.getUint8(offset) !== 0xff) {
+            break;
+          }
+
+          const marker = view.getUint8(offset + 1);
+          if (marker === 0xda || marker === 0xd9) {
+            break;
+          }
+
+          const segmentLength = view.getUint16(offset + 2, false);
+          if (marker === 0xe1 && offset + 10 <= view.byteLength) {
+            const exifHeader = String.fromCharCode(
+              view.getUint8(offset + 4),
+              view.getUint8(offset + 5),
+              view.getUint8(offset + 6),
+              view.getUint8(offset + 7),
+              view.getUint8(offset + 8),
+              view.getUint8(offset + 9)
+            );
+
+            if (exifHeader === "Exif\u0000\u0000") {
+              return { view, baseOffset: offset + 10 };
+            }
+          }
+
+          offset += 2 + segmentLength;
+        }
+      }
+
+      throw new Error("Unsupported file structure");
+    }
+
+    function createTiffReader(buffer) {
+      const { view, baseOffset } = extractTiffView(buffer);
+      const byteOrderA = String.fromCharCode(view.getUint8(baseOffset), view.getUint8(baseOffset + 1));
+      const littleEndian = byteOrderA === "II";
+
+      if (!littleEndian && byteOrderA !== "MM") {
+        throw new Error("Invalid TIFF byte order");
+      }
+
+      function readUint16(offset) {
+        return view.getUint16(baseOffset + offset, littleEndian);
+      }
+
+      function readUint32(offset) {
+        return view.getUint32(baseOffset + offset, littleEndian);
+      }
+
+      function readString(offset, length) {
+        const bytes = new Uint8Array(view.buffer, baseOffset + offset, length);
+        const decoded = new TextDecoder("ascii").decode(bytes);
+        return decoded.replace(/\0+$/, "").trim();
+      }
+
+      function readBytes(offset, length) {
+        return new Uint8Array(view.buffer.slice(baseOffset + offset, baseOffset + offset + length));
+      }
+
+      function readIfdEntries(offset) {
+        const count = readUint16(offset);
+        const entries = [];
+
+        for (let index = 0; index < count; index += 1) {
+          const entryOffset = offset + 2 + index * 12;
+          const tag = readUint16(entryOffset);
+          const type = readUint16(entryOffset + 2);
+          const valueCount = readUint32(entryOffset + 4);
+          const valueOrOffset = readUint32(entryOffset + 8);
+
+          entries.push({
+            tag,
+            type,
+            count: valueCount,
+            valueOrOffset
+          });
+        }
+
+        return entries;
+      }
+
+      function getInlineAscii(valueOrOffset, count) {
+        const bytes = new Uint8Array(4);
+        bytes[0] = valueOrOffset & 0xff;
+        bytes[1] = (valueOrOffset >> 8) & 0xff;
+        bytes[2] = (valueOrOffset >> 16) & 0xff;
+        bytes[3] = (valueOrOffset >> 24) & 0xff;
+        return new TextDecoder("ascii").decode(bytes.slice(0, count)).replace(/\0+$/, "").trim();
+      }
+
+      function getEntryValue(entry) {
+        const byteSize = getTypeSize(entry.type) * entry.count;
+
+        if (entry.type === 2) {
+          if (byteSize <= 4) {
+            return getInlineAscii(entry.valueOrOffset, entry.count);
+          }
+          return readString(entry.valueOrOffset, entry.count);
+        }
+
+        if (entry.type === 3 && entry.count === 1) {
+          return byteSize <= 4
+            ? (littleEndian ? entry.valueOrOffset & 0xffff : entry.valueOrOffset >>> 16)
+            : readUint16(entry.valueOrOffset);
+        }
+
+        if (entry.type === 4 && entry.count === 1) {
+          return entry.valueOrOffset;
+        }
+
+        if (entry.type === 7) {
+          return readBytes(entry.valueOrOffset, byteSize);
+        }
+
         return null;
       }
 
-      candidates.sort((left, right) => {
-        const leftPath = left.path.toLowerCase();
-        const rightPath = right.path.toLowerCase();
-        const leftScore = (leftPath.includes("imagecount") ? 3 : 0) + (leftPath.includes("shutter") ? 2 : 0);
-        const rightScore = (rightPath.includes("imagecount") ? 3 : 0) + (rightPath.includes("shutter") ? 2 : 0);
+      return {
+        littleEndian,
+        readUint16,
+        readUint32,
+        readBytes,
+        readIfdEntries,
+        getEntryValue
+      };
+    }
 
-        if (leftScore !== rightScore) {
-          return rightScore - leftScore;
+    function decryptSonyBytes(bytes) {
+      const output = new Uint8Array(bytes.length);
+
+      for (let index = 0; index < bytes.length; index += 1) {
+        const value = bytes[index];
+        output[index] = value >= 249 ? value : (SONY_DECIPHER_MAP.get(value) ?? value);
+      }
+
+      return output;
+    }
+
+    function resolveSonyShutterCount(model, decryptedBytes) {
+      const normalizedModel = (model || "").toUpperCase();
+      const maxReasonableCount = 10000000;
+
+      const preferredOffsets = [];
+      if (/^ILCE-(7M5|6700|7CM2|7CR|ZV-E1|1M2)$/.test(normalizedModel)) {
+        preferredOffsets.push(10);
+      } else if (/^ILCE-(7M3|7M4|7RM3|7RM4|7RM5|7SM3|9|9M2|9M3|6400|6600|6100)$/.test(normalizedModel)) {
+        preferredOffsets.push(58);
+      }
+
+      const fallbackOffsets = [50, 76, 58, 10];
+      const orderedOffsets = [...preferredOffsets, ...fallbackOffsets.filter((offset) => !preferredOffsets.includes(offset))];
+      const view = new DataView(decryptedBytes.buffer, decryptedBytes.byteOffset, decryptedBytes.byteLength);
+
+      for (const offset of orderedOffsets) {
+        if (offset + 4 > decryptedBytes.length) {
+          continue;
         }
 
-        return right.value - left.value;
-      });
+        const value = view.getUint32(offset, true);
+        if (value > 0 && value < maxReasonableCount) {
+          return {
+            value,
+            sourceTag: `Sony MakerNote 0x9050 @ ${offset}`
+          };
+        }
+      }
 
-      return candidates[0];
+      return null;
+    }
+
+    function parseSonyMakerNote(buffer) {
+      const reader = createTiffReader(buffer);
+      const ifd0Offset = reader.readUint32(4);
+      const ifd0Entries = reader.readIfdEntries(ifd0Offset);
+      const entryMap0 = new Map(ifd0Entries.map((entry) => [entry.tag, entry]));
+
+      const make = entryMap0.has(0x010f) ? reader.getEntryValue(entryMap0.get(0x010f)) : "";
+      const model = entryMap0.has(0x0110) ? reader.getEntryValue(entryMap0.get(0x0110)) : "";
+      const software = entryMap0.has(0x0131) ? reader.getEntryValue(entryMap0.get(0x0131)) : "";
+
+      const exifPointerEntry = entryMap0.get(0x8769);
+      if (!exifPointerEntry) {
+        return { make, model, software, metadataFound: false, shutterCount: null, sourceTag: "" };
+      }
+
+      const exifOffset = exifPointerEntry.valueOrOffset;
+      const exifEntries = reader.readIfdEntries(exifOffset);
+      const exifMap = new Map(exifEntries.map((entry) => [entry.tag, entry]));
+      const capturedAt = exifMap.has(0x9003) ? reader.getEntryValue(exifMap.get(0x9003)) : "";
+      const makerNoteEntry = exifMap.get(0x927c);
+
+      if (!makerNoteEntry) {
+        return { make, model, software, capturedAt, metadataFound: true, shutterCount: null, sourceTag: "" };
+      }
+
+      const makerNoteOffset = makerNoteEntry.valueOrOffset;
+      const makerEntries = reader.readIfdEntries(makerNoteOffset);
+      const makerMap = new Map(makerEntries.map((entry) => [entry.tag, entry]));
+      const shutterBlockEntry = makerMap.get(0x9050);
+
+      if (!shutterBlockEntry) {
+        return { make, model, software, capturedAt, metadataFound: true, shutterCount: null, sourceTag: "" };
+      }
+
+      const encryptedBytes = reader.getEntryValue(shutterBlockEntry);
+      const decryptedBytes = decryptSonyBytes(encryptedBytes);
+      const shutterCount = resolveSonyShutterCount(model, decryptedBytes);
+
+      return {
+        make,
+        model,
+        software,
+        capturedAt,
+        metadataFound: true,
+        shutterCount: shutterCount ? shutterCount.value : null,
+        sourceTag: shutterCount ? shutterCount.sourceTag : ""
+      };
+    }
+
+    function findExactShutterTag(value, path = "", seen = new WeakSet()) {
+      const matches = [];
+
+      if (value === null || value === undefined || typeof value !== "object") {
+        return matches;
+      }
+
+      if (seen.has(value)) {
+        return matches;
+      }
+      seen.add(value);
+
+      const exactNames = new Set(["imagecount", "shuttercount", "shuttercount2"]);
+
+      for (const [key, nested] of Object.entries(value)) {
+        const nextPath = path ? `${path}.${key}` : key;
+        const normalizedKey = key.toLowerCase();
+
+        if (exactNames.has(normalizedKey)) {
+          const numericValue = typeof nested === "number" ? nested : Number(nested);
+          if (Number.isFinite(numericValue) && numericValue > 0) {
+            matches.push({ path: nextPath, value: Math.trunc(numericValue) });
+          }
+        }
+
+        if (nested && typeof nested === "object") {
+          matches.push(...findExactShutterTag(nested, nextPath, seen));
+        }
+      }
+
+      return matches;
     }
 
     function renderResult(result) {
@@ -465,25 +670,42 @@
       setStatus(`Scanning ${selectedFile.name} for shutter count metadata...`, "warning");
 
       try {
-        if (!window.exifr) {
-          throw new Error("Metadata library unavailable");
+        const fileBuffer = await selectedFile.arrayBuffer();
+        let sonyData = null;
+        let tags = null;
+
+        try {
+          sonyData = parseSonyMakerNote(fileBuffer);
+        } catch {
+          sonyData = null;
         }
 
-        const tags = await window.exifr.parse(selectedFile, true);
-        const bestCount = pickBestCount(tags || {});
-        const make = tags?.Make || tags?.make || "";
-        const model = tags?.Model || tags?.model || "";
-        const capturedAt = formatDate(tags?.DateTimeOriginal || tags?.CreateDate || tags?.ModifyDate || "");
-        const software = tags?.Software || tags?.software || "";
+        try {
+          tags = window.exifr ? await window.exifr.parse(selectedFile, true) : null;
+        } catch {
+          tags = null;
+        }
+
+        const exactMatches = findExactShutterTag(tags || {});
+        const exifCount = exactMatches.length > 0 ? exactMatches[0] : null;
+        const shutterCount = sonyData?.shutterCount ?? exifCount?.value ?? null;
+        const sourceTag = sonyData?.sourceTag || exifCount?.path || "";
+        const make = sonyData?.make || tags?.Make || tags?.make || "";
+        const model = sonyData?.model || tags?.Model || tags?.model || "";
+        const capturedAt = formatDate(sonyData?.capturedAt || tags?.DateTimeOriginal || tags?.CreateDate || tags?.ModifyDate || "");
+        const software = sonyData?.software || tags?.Software || tags?.software || "";
 
         parsedResult = {
-          shutterCount: bestCount ? Math.trunc(bestCount.value) : null,
-          sourceTag: bestCount ? bestCount.path : "",
+          shutterCount,
+          sourceTag,
           make,
           model,
           capturedAt,
           software,
-          metadataFound: Boolean(tags && Object.keys(tags).length)
+          metadataFound: Boolean(
+            (sonyData && (sonyData.metadataFound || sonyData.make || sonyData.model)) ||
+            (tags && Object.keys(tags).length)
+          )
         };
 
         renderResult(parsedResult);
