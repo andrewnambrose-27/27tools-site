@@ -862,49 +862,6 @@
       glow.style.top = `${e.clientY}px`;
     });
 
-    if (card) {
-      card.addEventListener("mousemove", (e) => {
-        const rect = card.getBoundingClientRect();
-        const x = e.clientX - rect.left;
-        const y = e.clientY - rect.top;
-        const px = x / rect.width;
-        const py = y / rect.height;
-        const rotateY = (px - 0.5) * 3;
-        const rotateX = (0.5 - py) * 3;
-
-        card.style.transform = `rotateX(${rotateX}deg) rotateY(${rotateY}deg) translateY(-2px)`;
-        card.style.setProperty("--mx", `${px * 100}%`);
-        card.style.setProperty("--my", `${py * 100}%`);
-      });
-
-      card.addEventListener("mouseenter", () => {
-        if (glow) {
-          glow.style.width = "180px";
-          glow.style.height = "180px";
-          glow.style.opacity = "0.35";
-          glow.style.filter = "blur(28px)";
-        }
-
-        card.style.transition =
-          "transform 0.12s ease, box-shadow 0.25s ease, border-color 0.25s ease, background 0.25s ease";
-      });
-
-      card.addEventListener("mouseleave", () => {
-        if (glow) {
-          glow.style.width = "320px";
-          glow.style.height = "320px";
-          glow.style.opacity = "0.9";
-          glow.style.filter = "blur(40px)";
-        }
-
-        card.style.transition =
-          "transform 0.45s ease, box-shadow 0.25s ease, border-color 0.25s ease, background 0.25s ease";
-        card.style.transform = "rotateX(0deg) rotateY(0deg) translateY(0px)";
-        card.style.setProperty("--mx", "50%");
-        card.style.setProperty("--my", "50%");
-      });
-    }
-
     if (menuToggle && menuPanel) {
       menuToggle.addEventListener("click", () => {
         const isOpen = menuPanel.classList.toggle("is-open");
