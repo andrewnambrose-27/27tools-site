@@ -265,79 +265,33 @@ h1 {
   overflow: hidden;
 }
 
-.hero-card::before{
-  content:"";
-  position:absolute;
-  inset:-2px;
-  border-radius:24px;
-  background:radial-gradient(
-    circle at center,
-    rgba(255,170,40,0.25),
-    transparent 70%
-  );
-  z-index:-1;
-  filter:blur(40px);
-  opacity:.5;
-}
-
 /* ===== 3D CARD SETUP ===== */
 .container {
   perspective: 1400px;
 }
 
-/* stronger glow behind card */
 .hero-card::before {
-  content: "";
-  position: absolute;
-  inset: -80px;
-  border-radius: 36px;
-  background:
-    radial-gradient(
-      circle at var(--mx, 50%) var(--my, 50%),
-      rgba(245, 163, 0, 0.18) 0%,
-      rgba(245, 163, 0, 0.08) 22%,
-      rgba(245, 163, 0, 0.03) 40%,
-      transparent 65%
-    );
-  filter: blur(40px);
+  content: none;
   opacity: 0;
-  z-index: -1;
-  transition: opacity 0.25s ease;
-  pointer-events: none;
 }
 
 .hero-card:hover::before {
-  opacity: 1;
+  opacity: 0;
 }
 
-/* internal light that follows mouse on card */
 .hero-card::after {
-  content: "";
-  position: absolute;
-  inset: 0;
-  border-radius: 24px;
-  background:
-    radial-gradient(
-      500px circle at var(--mx, 50%) var(--my, 50%),
-      rgba(255, 185, 60, 0.05) 0%,
-      rgba(255, 185, 60, 0.025) 24%,
-      rgba(255, 255, 255, 0.02) 40%,
-      transparent 62%
-    );
+  content: none;
   opacity: 0;
-  transition: opacity 0.25s ease;
-  pointer-events: none;
-  z-index: 0;
 }
 
 .hero-card:hover::after {
-  opacity: 1;
+  opacity: 0;
 }
 
 .hero-card:hover {
-  border-color: rgba(245, 163, 0, 0.22);
+  border-color: rgba(245, 163, 0, 0.16);
   box-shadow:
-    0 28px 80px rgba(0, 0, 0, 0.42),
+    0 24px 68px rgba(0, 0, 0, 0.38),
     0 0 0 1px rgba(255,255,255,0.03) inset;
 }
 
@@ -410,25 +364,6 @@ h1 {
   text-shadow:
     0 0 12px rgba(255,255,255,0.08),
     0 0 30px rgba(255,255,255,0.04);
-}
-
-.hero-card::after {
-  content: "";
-  position: absolute;
-  inset: 0;
-  border-radius: 24px;
-  background:
-    radial-gradient(
-      500px circle at var(--mx, 50%) var(--my, 50%),
-      rgba(255, 185, 60, 0.07) 0%,
-      rgba(255, 185, 60, 0.035) 22%,
-      rgba(255, 255, 255, 0.025) 38%,
-      transparent 60%
-    );
-  opacity: 0;
-  transition: opacity 0.25s ease;
-  pointer-events: none;
-  z-index: 0;
 }
 
 /* keep text from being too huge on mobile */
