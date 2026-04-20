@@ -165,18 +165,30 @@
         const y = e.clientY - rect.top;
         const px = x / rect.width;
         const py = y / rect.height;
-        const rotateY = (px - 0.5) * 2.1;
-        const rotateX = (0.5 - py) * 2.1;
+        const rotateY = (px - 0.5) * 1.05;
+        const rotateX = (0.5 - py) * 1.05;
 
-        card.style.transform = `rotateX(${rotateX}deg) rotateY(${rotateY}deg) translateY(-2px)`;
+        card.style.transform = `rotateX(${rotateX}deg) rotateY(${rotateY}deg) translateY(-1px)`;
         card.style.setProperty("--mx", `${px * 100}%`);
         card.style.setProperty("--my", `${py * 100}%`);
       });
 
+      card.addEventListener("mouseenter", () => {
+        if (!glow) return;
+        glow.style.width = "420px";
+        glow.style.height = "420px";
+        glow.style.opacity = "0.55";
+        glow.style.filter = "blur(58px)";
+      });
+
       card.addEventListener("mouseleave", () => {
+        if (glow) {
+          glow.style.width = "320px";
+          glow.style.height = "320px";
+          glow.style.opacity = "0.9";
+          glow.style.filter = "blur(40px)";
+        }
         card.style.transform = "rotateX(0deg) rotateY(0deg) translateY(0px)";
-        card.style.setProperty("--mx", "50%");
-        card.style.setProperty("--my", "50%");
       });
     }
 
