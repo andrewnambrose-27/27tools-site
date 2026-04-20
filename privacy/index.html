@@ -127,20 +127,20 @@
         const px = x / rect.width;
         const py = y / rect.height;
 
-        const rotateY = (px - 0.5) * 2.5;
-        const rotateX = (0.5 - py) * 2.5;
+        const rotateY = (px - 0.5) * 1.15;
+        const rotateX = (0.5 - py) * 1.15;
 
-        card.style.transform = `rotateX(${rotateX}deg) rotateY(${rotateY}deg) translateY(-2px)`;
+        card.style.transform = `rotateX(${rotateX}deg) rotateY(${rotateY}deg) translateY(-1px)`;
         card.style.setProperty("--mx", `${px * 100}%`);
         card.style.setProperty("--my", `${py * 100}%`);
       });
 
       card.addEventListener("mouseenter", () => {
         if (glow) {
-          glow.style.width = "170px";
-          glow.style.height = "170px";
-          glow.style.opacity = "0.30";
-          glow.style.filter = "blur(26px)";
+          glow.style.width = "420px";
+          glow.style.height = "420px";
+          glow.style.opacity = "0.55";
+          glow.style.filter = "blur(58px)";
         }
       });
 
@@ -153,8 +153,6 @@
         }
 
         card.style.transform = "rotateX(0deg) rotateY(0deg) translateY(0px)";
-        card.style.setProperty("--mx", "50%");
-        card.style.setProperty("--my", "50%");
       });
     }
 
