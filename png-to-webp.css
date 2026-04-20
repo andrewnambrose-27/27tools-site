@@ -136,6 +136,7 @@ body::after {
   backdrop-filter: blur(14px);
   box-shadow: 0 14px 36px rgba(0,0,0,0.26);
   cursor: pointer;
+  transition: border-color 0.22s ease, box-shadow 0.22s ease, transform 0.22s ease;
 }
 
 .menu-toggle span:not(.sr-only) {
@@ -143,6 +144,15 @@ body::after {
   height: 2px;
   border-radius: 999px;
   background: linear-gradient(90deg, var(--accent-2), var(--accent));
+}
+
+.menu-toggle:hover {
+  border-color: rgba(245, 163, 0, 0.55);
+  box-shadow:
+    0 14px 36px rgba(0,0,0,0.26),
+    0 0 0 1px rgba(245, 163, 0, 0.18),
+    0 0 24px rgba(245, 163, 0, 0.18);
+  transform: translateY(-1px);
 }
 
 .menu-panel {
@@ -784,19 +794,6 @@ footer {
     width: 100%;
     min-width: 0;
   }
-
-  .menu-toggle {
-  transition: border-color 0.22s ease, box-shadow 0.22s ease, transform 0.22s ease;
-}
-
-.menu-toggle:hover {
-  border-color: rgba(245, 163, 0, 0.55);
-  box-shadow:
-    0 14px 36px rgba(0,0,0,0.26),
-    0 0 0 1px rgba(245, 163, 0, 0.18),
-    0 0 24px rgba(245, 163, 0, 0.18);
-  transform: translateY(-1px);
-}
 
   .result-row {
     grid-template-columns: 1fr;
