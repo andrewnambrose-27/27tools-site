@@ -98,6 +98,7 @@
                   <span class="dropzone-title">Drop PNGs here</span>
                   <span class="dropzone-copy">or click to choose one or more files</span>
                 </label>
+                <p class="upload-limits-note">Max 20 files per batch - 100 MB total - 50 files per day per browser</p>
               </div>
 
               <div class="tool-actions">
@@ -128,11 +129,20 @@
               </div>
 
               <div class="panel-block">
+                <p class="eyebrow">Daily limit</p>
+                <div class="value-card">
+                  <strong id="dailyLimitValue">50 remaining</strong>
+                  <span>Soft protection stored in this browser. It resets each day.</span>
+                </div>
+              </div>
+
+              <div class="panel-block">
                 <p class="eyebrow">About this tool</p>
                 <div class="note-card">
                   <p>
                     Best for transparent PNGs, screenshots, exported graphics, and website assets.
                     Each file is converted locally in your browser for a simple, private workflow.
+                    A daily browser limit helps reduce casual spam and bot use.
                   </p>
                 </div>
               </div>
@@ -203,11 +213,57 @@
     const convertedCount = document.getElementById("convertedCount");
     const originalSize = document.getElementById("originalSize");
     const convertedSize = document.getElementById("convertedSize");
+    const dailyLimitValue = document.getElementById("dailyLimitValue");
     const statusBanner = document.getElementById("statusBanner");
 
     const queue = [];
     const results = [];
     let converting = false;
+    const DAILY_FILE_LIMIT = 50;
+    const MAX_FILES_PER_BATCH = 20;
+    const MAX_TOTAL_BATCH_BYTES = 100 * 1024 * 1024;
+    const LIMIT_STORAGE_KEY = "pngToWebpDailyLimit";
+
+    function getTodayKey() {
+      const now = new Date();
+      const year = now.getFullYear();
+      const month = String(now.getMonth() + 1).padStart(2, "0");
+      const day = String(now.getDate()).padStart(2, "0");
+      return `${year}-${month}-${day}`;
+    }
+
+    function getLimitState() {
+      const today = getTodayKey();
+
+      try {
+        const parsed = JSON.parse(localStorage.getItem(LIMIT_STORAGE_KEY) || "{}");
+        if (parsed.date === today && Number.isFinite(parsed.count)) {
+          return parsed;
+        }
+      } catch (error) {
+        console.warn("Daily limit state could not be read.", error);
+      }
+
+      return { date: today, count: 0 };
+    }
+
+    function saveLimitState(state) {
+      localStorage.setItem(LIMIT_STORAGE_KEY, JSON.stringify(state));
+    }
+
+    function getRemainingLimit() {
+      const state = getLimitState();
+      return Math.max(0, DAILY_FILE_LIMIT - state.count);
+    }
+
+    function getQueueTotalBytes() {
+      return queue.reduce((sum, item) => sum + item.file.size, 0);
+    }
+
+    function refreshLimitDisplay() {
+      const remaining = getRemainingLimit();
+      dailyLimitValue.textContent = `${remaining} remaining`;
+    }
 
     function formatBytes(bytes) {
       if (!bytes) return "0 KB";
@@ -242,7 +298,7 @@
       convertedCount.textContent = String(convertedFiles);
       originalSize.textContent = formatBytes(originalTotal);
       convertedSize.textContent = formatBytes(convertedTotal);
-      convertButton.disabled = queuedFiles === 0 || converting;
+      convertButton.disabled = queuedFiles === 0 || converting || getRemainingLimit() === 0;
       downloadAllButton.disabled = convertedFiles === 0;
     }
 
@@ -310,7 +366,10 @@
     function addFiles(fileList) {
       const incoming = Array.from(fileList || []).filter((file) => file.type === "image/png" || /\.png$/i.test(file.name));
       const existingKeys = new Set(queue.map((item) => `${item.file.name}-${item.file.size}-${item.file.lastModified}`));
+      let runningBytes = getQueueTotalBytes();
       let added = 0;
+      let skippedForCount = 0;
+      let skippedForSize = 0;
 
       incoming.forEach((file) => {
         const key = `${file.name}-${file.size}-${file.lastModified}`;
@@ -318,12 +377,27 @@
           return;
         }
 
+        if (queue.length + added >= MAX_FILES_PER_BATCH) {
+          skippedForCount += 1;
+          return;
+        }
+
+        if (runningBytes + file.size > MAX_TOTAL_BATCH_BYTES) {
+          skippedForSize += 1;
+          return;
+        }
+
         queue.push({ file, key });
         existingKeys.add(key);
+        runningBytes += file.size;
         added += 1;
       });
 
-      if (added > 0) {
+      if (skippedForCount > 0) {
+        setStatus(`Queue limit reached. You can add up to ${MAX_FILES_PER_BATCH} PNG files at once.`, "error");
+      } else if (skippedForSize > 0) {
+        setStatus("Total queue size limit reached. Please keep the batch under 100 MB.", "error");
+      } else if (added > 0) {
         setStatus(`${added} PNG file${added === 1 ? "" : "s"} added to the queue.`, "success");
       } else if (fileList && fileList.length > 0) {
         setStatus("Only new PNG files were added. Duplicates were skipped.", "neutral");
@@ -385,6 +459,24 @@
       setStatus(`Converting ${queue.length} file${queue.length === 1 ? "" : "s"} to WEBP...`, "neutral");
 
       const quality = Number(qualityRange.value) / 100;
+      const remainingLimit = getRemainingLimit();
+
+      if (remainingLimit <= 0) {
+        setStatus("Daily browser limit reached. Please try again tomorrow.", "error");
+        converting = false;
+        convertButton.textContent = "Convert to WEBP";
+        refresh();
+        return;
+      }
+
+      if (queue.length > remainingLimit) {
+        setStatus(`You can convert ${remainingLimit} more file${remainingLimit === 1 ? "" : "s"} today in this browser.`, "error");
+        converting = false;
+        convertButton.textContent = "Convert to WEBP";
+        refresh();
+        return;
+      }
+
       results.forEach((item) => URL.revokeObjectURL(item.url));
       results.length = 0;
 
@@ -404,6 +496,11 @@
           renderResults();
           updateSummary();
         }
+
+        const limitState = getLimitState();
+        limitState.count += results.length;
+        saveLimitState(limitState);
+        refreshLimitDisplay();
 
         setStatus(`Converted ${results.length} file${results.length === 1 ? "" : "s"} to WEBP.`, "success");
       } catch (error) {
@@ -519,6 +616,7 @@
     });
     downloadAllButton.addEventListener("click", downloadAll);
 
+    refreshLimitDisplay();
     refresh();
   </script>
 </body>
