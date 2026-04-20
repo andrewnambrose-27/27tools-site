@@ -1,8 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <link rel="icon" href="/favicon.ico">
-  <link rel="apple-touch-icon" href="/apple-touch-icon.png">
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Privacy Policy | 27Tools</title>
@@ -11,6 +9,24 @@
 <body>
   <div class="cursor-glow"></div>
   <div class="particles"></div>
+  <nav class="site-menu">
+    <button class="menu-toggle" type="button" aria-expanded="false" aria-controls="menuPanel">
+      <span></span>
+      <span></span>
+      <span></span>
+      <span class="sr-only">Open navigation menu</span>
+    </button>
+    <div class="menu-panel" id="menuPanel">
+      <a href="index.html" class="menu-link">Home</a>
+      <a href="privacy.html" class="menu-link">Privacy Policy</a>
+      <details class="menu-group">
+        <summary class="menu-link menu-parent">Tools</summary>
+        <div class="submenu">
+          <a href="png-to-webp.html" class="submenu-link">PNG to WEBP</a>
+        </div>
+      </details>
+    </div>
+  </nav>
 
   <div class="container privacy-container">
     <div class="hero-card privacy-card" id="privacy-card">
@@ -84,13 +100,15 @@
     </div>
 
     <footer>
-      <p>&copy; 2026 27Tools - Built by 27Tools</p>
+      <p>&copy; 2026 27Tools - Built by Andrew</p>
     </footer>
   </div>
 
   <script>
     const glow = document.querySelector(".cursor-glow");
     const card = document.getElementById("privacy-card");
+    const menuToggle = document.querySelector(".menu-toggle");
+    const menuPanel = document.getElementById("menuPanel");
 
     document.addEventListener("mousemove", (e) => {
       if (!glow) return;
@@ -135,6 +153,20 @@
         card.style.transform = "rotateX(0deg) rotateY(0deg) translateY(0px)";
         card.style.setProperty("--mx", "50%");
         card.style.setProperty("--my", "50%");
+      });
+    }
+
+    if (menuToggle && menuPanel) {
+      menuToggle.addEventListener("click", () => {
+        const isOpen = menuPanel.classList.toggle("is-open");
+        menuToggle.setAttribute("aria-expanded", String(isOpen));
+      });
+
+      document.addEventListener("click", (event) => {
+        if (!menuPanel.classList.contains("is-open")) return;
+        if (event.target.closest(".site-menu")) return;
+        menuPanel.classList.remove("is-open");
+        menuToggle.setAttribute("aria-expanded", "false");
       });
     }
   </script>
