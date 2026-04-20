@@ -70,7 +70,16 @@
     </div>
 
     <section class="tool-grid" aria-label="Featured tools">
-      <article class="tool-card">
+      <div class="tools-title-wrap">
+        <img
+          src="/our-tools.png"
+          alt="Our Tools"
+          class="tools-title-image"
+          onerror="this.closest('.tools-title-wrap').style.display='none'"
+        />
+      </div>
+
+      <article class="tool-card tilt-surface">
         <div class="tool-card-top">
           <span class="tool-badge">Featured Tool</span>
           <span class="tool-format">PNG to WEBP</span>
@@ -87,7 +96,7 @@
         </div>
         <a href="/tools/png-to-webp/" class="tool-link">Launch tool</a>
       </article>
-      <article class="tool-card">
+      <article class="tool-card tilt-surface">
         <div class="tool-card-top">
           <span class="tool-badge">New Tool</span>
           <span class="tool-format">Sony Shutter Count</span>
@@ -114,6 +123,7 @@
   <script>
     const glow = document.querySelector(".cursor-glow");
     const card = document.getElementById("tilt-card");
+    const tiltSurfaces = document.querySelectorAll(".tilt-surface");
     const menuToggle = document.querySelector(".menu-toggle");
     const menuPanel = document.getElementById("menuPanel");
 
@@ -124,22 +134,24 @@
       glow.style.top = `${e.clientY}px`;
     });
 
-    if (card) {
-      card.addEventListener("mousemove", (e) => {
-        const rect = card.getBoundingClientRect();
+    function attachTilt(surface, strength) {
+      if (!surface) return;
+
+      surface.addEventListener("mousemove", (e) => {
+        const rect = surface.getBoundingClientRect();
         const x = e.clientX - rect.left;
         const y = e.clientY - rect.top;
         const px = x / rect.width;
         const py = y / rect.height;
-        const rotateY = (px - 0.5) * 1.35;
-        const rotateX = (0.5 - py) * 1.35;
+        const rotateY = (px - 0.5) * strength;
+        const rotateX = (0.5 - py) * strength;
 
-        card.style.transform = `rotateX(${rotateX}deg) rotateY(${rotateY}deg) translateY(-1px)`;
-        card.style.setProperty("--mx", `${px * 100}%`);
-        card.style.setProperty("--my", `${py * 100}%`);
+        surface.style.transform = `rotateX(${rotateX}deg) rotateY(${rotateY}deg) translateY(-1px)`;
+        surface.style.setProperty("--mx", `${px * 100}%`);
+        surface.style.setProperty("--my", `${py * 100}%`);
       });
 
-      card.addEventListener("mouseenter", () => {
+      surface.addEventListener("mouseenter", () => {
         if (glow) {
           glow.style.width = "420px";
           glow.style.height = "420px";
@@ -147,11 +159,11 @@
           glow.style.filter = "blur(58px)";
         }
 
-        card.style.transition =
+        surface.style.transition =
           "transform 0.16s ease, box-shadow 0.25s ease, border-color 0.25s ease, background 0.25s ease";
       });
 
-      card.addEventListener("mouseleave", () => {
+      surface.addEventListener("mouseleave", () => {
         if (glow) {
           glow.style.width = "320px";
           glow.style.height = "320px";
@@ -159,11 +171,14 @@
           glow.style.filter = "blur(40px)";
         }
 
-        card.style.transition =
+        surface.style.transition =
           "transform 0.45s ease, box-shadow 0.25s ease, border-color 0.25s ease, background 0.25s ease";
-        card.style.transform = "rotateX(0deg) rotateY(0deg) translateY(0px)";
+        surface.style.transform = "rotateX(0deg) rotateY(0deg) translateY(0px)";
       });
     }
+
+    attachTilt(card, 1.35);
+    tiltSurfaces.forEach((surface) => attachTilt(surface, 0.8));
 
     if (menuToggle && menuPanel) {
       menuToggle.addEventListener("click", () => {
