@@ -440,6 +440,14 @@ input[type="range"] {
   color: var(--muted);
 }
 
+.upload-limits-note {
+  margin: -2px 4px 0;
+  color: #97a2ae;
+  font-size: 12px;
+  line-height: 1.5;
+  text-align: center;
+}
+
 .tool-actions {
   display: grid;
   gap: 12px;
