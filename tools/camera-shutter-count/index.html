@@ -1,0 +1,638 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Camera Shutter Count | 27Tools</title>
+  <meta
+    name="description"
+    content="Check the shutter count of a camera from an original JPG or ARW file, right in your browser."
+  />
+  <link rel="stylesheet" href="./camera-shutter-count.css" />
+</head>
+<script>
+(function () {
+  fetch("https://analytics.27tools.co/collect", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json"
+    },
+    body: JSON.stringify({
+      path: window.location.pathname
+    }),
+    keepalive: true
+  }).catch(() => {});
+})();
+</script>
+<body>
+  <div class="cursor-glow"></div>
+  <div class="particles"></div>
+  <nav class="site-menu">
+    <button class="menu-toggle" type="button" aria-expanded="false" aria-controls="menuPanel">
+      <span></span>
+      <span></span>
+      <span></span>
+      <span class="sr-only">Open navigation menu</span>
+    </button>
+    <div class="menu-panel" id="menuPanel">
+      <a href="/" class="menu-link">Home</a>
+      <a href="/about/" class="menu-link">About Us</a>
+      <a href="/privacy/" class="menu-link">Privacy Policy</a>
+      <details class="menu-group">
+        <summary class="menu-link menu-parent">Tools</summary>
+        <div class="submenu">
+          <a href="/tools/png-to-webp/" class="submenu-link">PNG to WEBP</a>
+          <a href="/tools/camera-shutter-count/" class="submenu-link">Camera Shutter Count</a>
+        </div>
+      </details>
+    </div>
+  </nav>
+
+  <div class="container tool-page-container">
+    <a href="/" class="tool-page-brand" aria-label="Go to 27Tools home">
+      <img src="/logo.png" alt="27Tools logo" class="tool-page-brand-image" />
+    </a>
+
+    <section class="hero-card tool-hero-card" id="tool-page-card">
+      <div class="tool-shell">
+        <div class="tool-shell-main">
+          <div class="tool-heading">
+            <div class="status-row tool-status-row">
+              <span class="status-pill">Camera Shutter Count</span>
+              <span class="status-pill">Sony-friendly</span>
+              <span class="status-pill">No upload needed</span>
+            </div>
+
+            <div class="tool-title-lockup">
+              <p class="tool-kicker">Metadata reader</p>
+              <h1 class="tool-title">Check your camera's <span class="accent">shutter count</span></h1>
+            </div>
+
+            <p class="tool-subtitle">
+              Drop in an original JPG, JPEG, or ARW file from your camera and this page will
+              scan the metadata for the shutter count. Best used with a straight-out-of-camera file
+              when you are listing a body for sale.
+            </p>
+          </div>
+
+          <div class="tool-layout">
+            <aside class="tool-panel control-panel">
+              <div class="panel-block">
+                <p class="eyebrow">Supported workflow</p>
+                <div class="value-card">
+                  <strong>Original file only</strong>
+                  <span>Use the last unedited JPG or ARW direct from the camera. Exported or edited files often strip the maker-note data this tool needs.</span>
+                </div>
+              </div>
+
+              <div class="panel-block">
+                <p class="eyebrow">Add camera file</p>
+                <label class="dropzone" id="dropzone" for="fileInput">
+                  <input id="fileInput" type="file" accept=".jpg,.jpeg,.arw,image/jpeg" />
+                  <span class="dropzone-title">Drop your file here</span>
+                  <span class="dropzone-copy">or click to choose one original camera file</span>
+                  <span class="dropzone-types">Supports Sony JPG, JPEG, and ARW files</span>
+                </label>
+              </div>
+
+              <div class="tool-actions">
+                <button type="button" class="app-link tool-button" id="analyzeButton" disabled>Read shutter count</button>
+                <button type="button" class="secondary-link tool-button secondary-button" id="clearButton">Clear file</button>
+              </div>
+
+              <div class="panel-block">
+                <p class="eyebrow">Session summary</p>
+                <div class="stats-grid">
+                  <div class="stat-card">
+                    <span class="stat-label">Files loaded</span>
+                    <strong id="fileCount">0</strong>
+                  </div>
+                  <div class="stat-card">
+                    <span class="stat-label">File size</span>
+                    <strong id="fileSize">0 KB</strong>
+                  </div>
+                  <div class="stat-card">
+                    <span class="stat-label">Status</span>
+                    <strong id="scanState">Waiting</strong>
+                  </div>
+                  <div class="stat-card">
+                    <span class="stat-label">Result</span>
+                    <strong id="resultState">None</strong>
+                  </div>
+                </div>
+              </div>
+
+              <div class="panel-block">
+                <p class="eyebrow">About this tool</p>
+                <div class="note-card">
+                  <p>
+                    This tool runs in your browser and is aimed at Sony-style maker-note metadata,
+                    including files from cameras like the A7 III. If the metadata has already been
+                    stripped, the page will tell you and suggest using a different original file.
+                  </p>
+                </div>
+              </div>
+            </aside>
+
+            <div class="tool-panel workspace-panel">
+              <section class="panel-block">
+                <div class="section-head">
+                  <div>
+                    <p class="eyebrow">Current file</p>
+                    <h2>What will be scanned</h2>
+                  </div>
+                  <span class="panel-hint">One file at a time</span>
+                </div>
+                <div class="list-surface" id="fileSurface">
+                  <div class="empty-state">
+                    <strong>No file selected yet</strong>
+                    <span>Add an original JPG or ARW to begin.</span>
+                  </div>
+                </div>
+              </section>
+
+              <section class="panel-block">
+                <div class="section-head">
+                  <div>
+                    <p class="eyebrow">Shutter count result</p>
+                    <h2>Your scan result</h2>
+                  </div>
+                  <span class="panel-hint">Private browser-side scan</span>
+                </div>
+                <div class="result-card" id="resultSurface">
+                  <div class="empty-state">
+                    <strong>No result yet</strong>
+                    <span>Your shutter count result will appear here after scanning.</span>
+                  </div>
+                </div>
+              </section>
+
+              <section class="status-banner" id="statusBanner" aria-live="polite">
+                Add an original camera file to get started.
+              </section>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <footer>
+      <p>&copy; 2026 27Tools - Built by 27Tools - <a href="/about/" class="footer-inline-link">About</a> - <a href="/privacy/" class="footer-inline-link">Privacy</a></p>
+    </footer>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/exifr/dist/full.umd.js"></script>
+  <script>
+    const glow = document.querySelector(".cursor-glow");
+    const card = document.getElementById("tool-page-card");
+    const menuToggle = document.querySelector(".menu-toggle");
+    const menuPanel = document.getElementById("menuPanel");
+    const fileInput = document.getElementById("fileInput");
+    const dropzone = document.getElementById("dropzone");
+    const analyzeButton = document.getElementById("analyzeButton");
+    const clearButton = document.getElementById("clearButton");
+    const statusBanner = document.getElementById("statusBanner");
+    const fileSurface = document.getElementById("fileSurface");
+    const resultSurface = document.getElementById("resultSurface");
+    const fileCount = document.getElementById("fileCount");
+    const fileSize = document.getElementById("fileSize");
+    const scanState = document.getElementById("scanState");
+    const resultState = document.getElementById("resultState");
+
+    let selectedFile = null;
+    let parsedResult = null;
+    let scanning = false;
+
+    function formatBytes(bytes) {
+      if (!bytes) return "0 KB";
+      const units = ["B", "KB", "MB", "GB"];
+      let size = bytes;
+      let unitIndex = 0;
+
+      while (size >= 1024 && unitIndex < units.length - 1) {
+        size /= 1024;
+        unitIndex += 1;
+      }
+
+      return `${size.toFixed(size >= 10 || unitIndex === 0 ? 0 : 1)} ${units[unitIndex]}`;
+    }
+
+    function setStatus(message, tone) {
+      statusBanner.textContent = message;
+      statusBanner.dataset.tone = tone || "neutral";
+    }
+
+    function resetResult() {
+      parsedResult = null;
+      resultSurface.innerHTML = `
+        <div class="empty-state">
+          <strong>No result yet</strong>
+          <span>Your shutter count result will appear here after scanning.</span>
+        </div>
+      `;
+      resultState.textContent = "None";
+    }
+
+    function updateSummary() {
+      fileCount.textContent = selectedFile ? "1" : "0";
+      fileSize.textContent = selectedFile ? formatBytes(selectedFile.size) : "0 KB";
+      scanState.textContent = scanning ? "Scanning" : selectedFile ? "Ready" : "Waiting";
+      analyzeButton.disabled = !selectedFile || scanning;
+    }
+
+    function renderFileSurface() {
+      if (!selectedFile) {
+        fileSurface.innerHTML = `
+          <div class="empty-state">
+            <strong>No file selected yet</strong>
+            <span>Add an original JPG or ARW to begin.</span>
+          </div>
+        `;
+        return;
+      }
+
+      const extension = selectedFile.name.includes(".")
+        ? selectedFile.name.split(".").pop().toUpperCase()
+        : "FILE";
+
+      fileSurface.innerHTML = `
+        <div class="result-summary">
+          <div class="meta-card">
+            <span class="eyebrow">Loaded file</span>
+            <strong>${selectedFile.name}</strong>
+            <span>${formatBytes(selectedFile.size)} - ${selectedFile.type || extension}</span>
+          </div>
+          <div class="tag-list">
+            <span class="tag-chip">Original file recommended</span>
+            <span class="tag-chip">Metadata scanned locally</span>
+            <span class="tag-chip">${extension}</span>
+          </div>
+        </div>
+      `;
+    }
+
+    function findCandidateNumbers(value, path = "", seen = new WeakSet()) {
+      const candidates = [];
+
+      if (value === null || value === undefined) {
+        return candidates;
+      }
+
+      const type = typeof value;
+
+      if (type === "number" && Number.isFinite(value)) {
+        const normalizedPath = String(path || "value").toLowerCase();
+        if (normalizedPath.includes("count") || normalizedPath.includes("shutter") || normalizedPath.includes("image")) {
+          candidates.push({ path: path || "value", value });
+        }
+        return candidates;
+      }
+
+      if (type === "string") {
+        const normalizedPath = String(path || "value").toLowerCase();
+        const numeric = Number(value);
+        if (Number.isFinite(numeric) && (normalizedPath.includes("count") || normalizedPath.includes("shutter"))) {
+          candidates.push({ path: path || "value", value: numeric });
+        }
+        return candidates;
+      }
+
+      if (type !== "object") {
+        return candidates;
+      }
+
+      if (seen.has(value)) {
+        return candidates;
+      }
+      seen.add(value);
+
+      if (Array.isArray(value)) {
+        value.forEach((item, index) => {
+          candidates.push(...findCandidateNumbers(item, `${path}[${index}]`, seen));
+        });
+        return candidates;
+      }
+
+      Object.entries(value).forEach(([key, nested]) => {
+        const nextPath = path ? `${path}.${key}` : key;
+        const normalizedKey = key.toLowerCase();
+
+        if ((normalizedKey.includes("imagecount") || normalizedKey.includes("shuttercount")) && typeof nested === "number") {
+          candidates.push({ path: nextPath, value: nested });
+          return;
+        }
+
+        candidates.push(...findCandidateNumbers(nested, nextPath, seen));
+      });
+
+      return candidates;
+    }
+
+    function pickBestCount(tags) {
+      const exactKeyMatches = [];
+
+      Object.entries(tags || {}).forEach(([key, value]) => {
+        const normalizedKey = key.toLowerCase();
+        const numericValue = typeof value === "number" ? value : Number(value);
+        if (!Number.isFinite(numericValue)) return;
+
+        if (normalizedKey === "imagecount" || normalizedKey === "shuttercount") {
+          exactKeyMatches.push({ path: key, value: numericValue });
+        }
+      });
+
+      const candidates = exactKeyMatches.length > 0
+        ? exactKeyMatches
+        : findCandidateNumbers(tags).filter((candidate) => candidate.value > 0 && Number.isInteger(candidate.value));
+
+      if (candidates.length === 0) {
+        return null;
+      }
+
+      candidates.sort((left, right) => {
+        const leftPath = left.path.toLowerCase();
+        const rightPath = right.path.toLowerCase();
+        const leftScore = (leftPath.includes("imagecount") ? 3 : 0) + (leftPath.includes("shutter") ? 2 : 0);
+        const rightScore = (rightPath.includes("imagecount") ? 3 : 0) + (rightPath.includes("shutter") ? 2 : 0);
+
+        if (leftScore !== rightScore) {
+          return rightScore - leftScore;
+        }
+
+        return right.value - left.value;
+      });
+
+      return candidates[0];
+    }
+
+    function renderResult(result) {
+      const messageTone = result.shutterCount ? "success" : result.metadataFound ? "warning" : "danger";
+      const messageText = result.shutterCount
+        ? "Shutter count found in the file metadata."
+        : result.metadataFound
+          ? "Metadata was found, but the shutter count field was not available in this file."
+          : "This file did not expose the camera maker-note data needed for a shutter count.";
+
+      const countMarkup = result.shutterCount
+        ? `
+          <div class="hero-result">
+            <span class="hero-result-label">Estimated shutter count</span>
+            <strong class="hero-result-value">${result.shutterCount.toLocaleString()}</strong>
+            <span class="hero-result-note">Source tag: ${result.sourceTag}</span>
+          </div>
+        `
+        : `
+          <div class="hero-result">
+            <span class="hero-result-label">Estimated shutter count</span>
+            <strong class="hero-result-value">Unavailable</strong>
+            <span class="hero-result-note">Try a different original image directly from the camera.</span>
+          </div>
+        `;
+
+      const make = result.make || "Unknown";
+      const model = result.model || "Unknown";
+      const capturedAt = result.capturedAt || "Unknown";
+      const software = result.software || "Not listed";
+
+      resultSurface.innerHTML = `
+        <div class="result-summary">
+          ${countMarkup}
+          <div class="result-message" data-tone="${messageTone}">
+            ${messageText}
+          </div>
+          <div class="meta-grid">
+            <div class="meta-card">
+              <span class="eyebrow">Camera make</span>
+              <strong>${make}</strong>
+              <span>Read from file metadata</span>
+            </div>
+            <div class="meta-card">
+              <span class="eyebrow">Camera model</span>
+              <strong>${model}</strong>
+              <span>Useful for confirming the file source</span>
+            </div>
+            <div class="meta-card">
+              <span class="eyebrow">Captured</span>
+              <strong>${capturedAt}</strong>
+              <span>Best results usually come from the latest image on the camera</span>
+            </div>
+            <div class="meta-card">
+              <span class="eyebrow">Software tag</span>
+              <strong>${software}</strong>
+              <span>If this shows editor software, metadata may have been changed</span>
+            </div>
+          </div>
+          <div class="tag-list">
+            <span class="tag-chip">No upload required</span>
+            <span class="tag-chip">Best with original JPG or ARW</span>
+            <span class="tag-chip">${result.metadataFound ? "Metadata found" : "Metadata missing"}</span>
+          </div>
+        </div>
+      `;
+    }
+
+    function formatDate(value) {
+      if (!value) return "";
+
+      try {
+        const parsed = value instanceof Date ? value : new Date(value);
+        if (Number.isNaN(parsed.getTime())) return String(value);
+        return parsed.toLocaleString();
+      } catch {
+        return String(value);
+      }
+    }
+
+    function setFile(file) {
+      selectedFile = file || null;
+      scanning = false;
+      resetResult();
+      renderFileSurface();
+      updateSummary();
+
+      if (selectedFile) {
+        setStatus(`Ready to scan ${selectedFile.name}. Click "Read shutter count" when you are ready.`, "neutral");
+      } else {
+        setStatus("Add an original camera file to get started.", "neutral");
+      }
+    }
+
+    async function analyzeFile() {
+      if (!selectedFile || scanning) return;
+
+      scanning = true;
+      updateSummary();
+      setStatus(`Scanning ${selectedFile.name} for shutter count metadata...`, "warning");
+
+      try {
+        if (!window.exifr) {
+          throw new Error("Metadata library unavailable");
+        }
+
+        const tags = await window.exifr.parse(selectedFile, true);
+        const bestCount = pickBestCount(tags || {});
+        const make = tags?.Make || tags?.make || "";
+        const model = tags?.Model || tags?.model || "";
+        const capturedAt = formatDate(tags?.DateTimeOriginal || tags?.CreateDate || tags?.ModifyDate || "");
+        const software = tags?.Software || tags?.software || "";
+
+        parsedResult = {
+          shutterCount: bestCount ? Math.trunc(bestCount.value) : null,
+          sourceTag: bestCount ? bestCount.path : "",
+          make,
+          model,
+          capturedAt,
+          software,
+          metadataFound: Boolean(tags && Object.keys(tags).length)
+        };
+
+        renderResult(parsedResult);
+        resultState.textContent = parsedResult.shutterCount ? "Found" : "Needs another file";
+
+        if (parsedResult.shutterCount) {
+          setStatus(
+            `Shutter count found: ${parsedResult.shutterCount.toLocaleString()}.`,
+            "success"
+          );
+        } else {
+          setStatus(
+            "The file was read, but no shutter count field was exposed. Try a different original JPG or ARW direct from the camera.",
+            parsedResult.metadataFound ? "warning" : "danger"
+          );
+        }
+      } catch (error) {
+        resetResult();
+        resultState.textContent = "Scan failed";
+        resultSurface.innerHTML = `
+          <div class="result-summary">
+            <div class="result-message" data-tone="danger">
+              The file could not be parsed for shutter metadata. Try another original JPG or ARW, preferably the most recent unedited file from the camera.
+            </div>
+          </div>
+        `;
+        setStatus(
+          "The scan could not read the metadata from that file. Try another original camera file.",
+          "danger"
+        );
+      } finally {
+        scanning = false;
+        updateSummary();
+      }
+    }
+
+    function handleFiles(files) {
+      const [file] = Array.from(files || []);
+      if (!file) return;
+
+      const lowerName = file.name.toLowerCase();
+      const valid = lowerName.endsWith(".jpg") || lowerName.endsWith(".jpeg") || lowerName.endsWith(".arw");
+
+      if (!valid) {
+        setStatus("Please use an original JPG, JPEG, or ARW file from the camera.", "danger");
+        return;
+      }
+
+      setFile(file);
+    }
+
+    document.addEventListener("mousemove", (e) => {
+      if (!glow) return;
+
+      glow.style.left = `${e.clientX}px`;
+      glow.style.top = `${e.clientY}px`;
+    });
+
+    if (card) {
+      card.addEventListener("mousemove", (e) => {
+        const rect = card.getBoundingClientRect();
+        const x = e.clientX - rect.left;
+        const y = e.clientY - rect.top;
+        const px = x / rect.width;
+        const py = y / rect.height;
+        const rotateY = (px - 0.5) * 3;
+        const rotateX = (0.5 - py) * 3;
+
+        card.style.transform = `rotateX(${rotateX}deg) rotateY(${rotateY}deg) translateY(-2px)`;
+        card.style.setProperty("--mx", `${px * 100}%`);
+        card.style.setProperty("--my", `${py * 100}%`);
+      });
+
+      card.addEventListener("mouseenter", () => {
+        if (glow) {
+          glow.style.width = "180px";
+          glow.style.height = "180px";
+          glow.style.opacity = "0.35";
+          glow.style.filter = "blur(28px)";
+        }
+
+        card.style.transition =
+          "transform 0.12s ease, box-shadow 0.25s ease, border-color 0.25s ease, background 0.25s ease";
+      });
+
+      card.addEventListener("mouseleave", () => {
+        if (glow) {
+          glow.style.width = "320px";
+          glow.style.height = "320px";
+          glow.style.opacity = "0.9";
+          glow.style.filter = "blur(40px)";
+        }
+
+        card.style.transition =
+          "transform 0.45s ease, box-shadow 0.25s ease, border-color 0.25s ease, background 0.25s ease";
+        card.style.transform = "rotateX(0deg) rotateY(0deg) translateY(0px)";
+        card.style.setProperty("--mx", "50%");
+        card.style.setProperty("--my", "50%");
+      });
+    }
+
+    if (menuToggle && menuPanel) {
+      menuToggle.addEventListener("click", () => {
+        const isOpen = menuPanel.classList.toggle("is-open");
+        menuToggle.setAttribute("aria-expanded", String(isOpen));
+      });
+
+      document.addEventListener("click", (event) => {
+        if (!menuPanel.classList.contains("is-open")) return;
+        if (event.target.closest(".site-menu")) return;
+        menuPanel.classList.remove("is-open");
+        menuToggle.setAttribute("aria-expanded", "false");
+      });
+    }
+
+    if (fileInput) {
+      fileInput.addEventListener("change", (event) => {
+        handleFiles(event.target.files);
+      });
+    }
+
+    if (dropzone) {
+      ["dragenter", "dragover"].forEach((eventName) => {
+        dropzone.addEventListener(eventName, (event) => {
+          event.preventDefault();
+          dropzone.classList.add("is-active");
+        });
+      });
+
+      ["dragleave", "drop"].forEach((eventName) => {
+        dropzone.addEventListener(eventName, (event) => {
+          event.preventDefault();
+          dropzone.classList.remove("is-active");
+        });
+      });
+
+      dropzone.addEventListener("drop", (event) => {
+        handleFiles(event.dataTransfer.files);
+      });
+    }
+
+    analyzeButton.addEventListener("click", analyzeFile);
+
+    clearButton.addEventListener("click", () => {
+      fileInput.value = "";
+      setFile(null);
+    });
+
+    updateSummary();
+  </script>
+</body>
+</html>
