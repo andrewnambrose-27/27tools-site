@@ -622,6 +622,16 @@ footer a:hover {
   color: var(--accent-2);
 }
 
+.footer-inline-link {
+  color: #8d97a3;
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+
+.footer-inline-link:hover {
+  color: var(--accent-2);
+}
+
 /* animations */
 @keyframes logoFloat {
   0% {
