@@ -33,11 +33,33 @@ jobs:
         uses: actions/checkout@v4
       - name: Setup Pages
         uses: actions/configure-pages@v5
+      - name: Build deploy directory
+        run: |
+          mkdir -p dist
+
+          if [ -f CNAME ]; then
+            cp CNAME dist/
+          fi
+
+          for dir in about privacy tools; do
+            if [ -d "$dir" ]; then
+              cp -R "$dir" "dist/$dir"
+            fi
+          done
+
+          for pattern in '*.html' '*.css' '*.js' '*.mjs' '*.txt' '*.png' '*.webp' '*.ico' '*.svg' '*.xml' '*.webmanifest'; do
+            for file in $pattern; do
+              if [ -f "$file" ]; then
+                cp "$file" dist/
+              fi
+            done
+          done
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
         with:
-          # Upload entire repository
-          path: '.'
+          # Upload only the dedicated deploy directory
+          path: './dist'
       - name: Deploy to GitHub Pages
         id: deployment
         uses: actions/deploy-pages@v4
+        
