@@ -817,7 +817,23 @@ footer a:hover {
 /* ===== HOME TOOL GRID ===== */
 
 .tool-grid {
-  margin-top: 28px;
+  display: grid;
+  gap: 24px;
+  margin-top: 44px;
+}
+
+.tools-title-wrap {
+  display: grid;
+  place-items: center;
+  padding: 8px 0 10px;
+}
+
+.tools-title-image {
+  width: min(420px, 78vw);
+  display: block;
+  filter:
+    drop-shadow(0 0 16px rgba(245, 163, 0, 0.08))
+    drop-shadow(0 0 32px rgba(245, 163, 0, 0.04));
 }
 
 .tool-card {
@@ -833,6 +849,13 @@ footer a:hover {
     0 18px 48px rgba(0, 0, 0, 0.24),
     inset 0 1px 0 rgba(255,255,255,0.03);
   text-align: left;
+  transform-style: preserve-3d;
+  transition:
+    transform 0.18s ease,
+    box-shadow 0.25s ease,
+    border-color 0.25s ease,
+    background 0.25s ease;
+  will-change: transform;
 }
 
 .tool-card-top,
@@ -901,6 +924,19 @@ footer a:hover {
 
 .tool-link:hover {
   text-decoration: underline;
+}
+
+.tool-card:hover {
+  border-color: rgba(245, 163, 0, 0.16);
+  box-shadow:
+    0 24px 64px rgba(0, 0, 0, 0.32),
+    inset 0 1px 0 rgba(255,255,255,0.03);
+}
+
+.tool-card > * {
+  position: relative;
+  z-index: 1;
+  transform: translateZ(16px);
 }
 
 /* ===== TOOL PAGE ===== */
