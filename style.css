@@ -1466,3 +1466,58 @@ input[type="range"] {
     margin-top: 28px;
   }
 }
+
+/* ===== 404 PAGE ===== */
+
+.not-found-container {
+  max-width: 980px;
+  min-height: 100vh;
+  display: grid;
+  place-items: center;
+  padding-top: 48px;
+  padding-bottom: 40px;
+}
+
+.not-found-card {
+  max-width: 760px;
+  padding: 42px 32px 34px;
+}
+
+.not-found-logo {
+  width: min(360px, 80%);
+  margin: 0 auto 18px;
+}
+
+.not-found-code {
+  margin: 0 0 12px;
+  font-size: 14px;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--accent-2);
+}
+
+.not-found-title {
+  margin: 0 0 14px;
+  font-size: clamp(40px, 8vw, 72px);
+  line-height: 0.95;
+  letter-spacing: -0.03em;
+  color: #fff;
+}
+
+.not-found-copy {
+  max-width: 580px;
+  margin: 0 auto 30px;
+  color: #c5ced8;
+  font-size: clamp(17px, 2.2vw, 21px);
+  line-height: 1.7;
+}
+
+@media (max-width: 640px) {
+  .not-found-container {
+    padding-top: 76px;
+  }
+
+  .not-found-card {
+    padding: 28px 18px 24px;
+  }
+}
