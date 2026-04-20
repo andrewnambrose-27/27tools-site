@@ -785,6 +785,19 @@ footer {
     min-width: 0;
   }
 
+  .menu-toggle {
+  transition: border-color 0.22s ease, box-shadow 0.22s ease, transform 0.22s ease;
+}
+
+.menu-toggle:hover {
+  border-color: rgba(245, 163, 0, 0.55);
+  box-shadow:
+    0 14px 36px rgba(0,0,0,0.26),
+    0 0 0 1px rgba(245, 163, 0, 0.18),
+    0 0 24px rgba(245, 163, 0, 0.18);
+  transform: translateY(-1px);
+}
+
   .result-row {
     grid-template-columns: 1fr;
   }
