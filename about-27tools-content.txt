@@ -1,4 +1,3 @@
-## About 27tools
 27tools started as a simple idea. Build small tools that actually make life easier.
 
 No unnecessary steps. No overcomplicated interfaces.
