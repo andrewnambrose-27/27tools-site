@@ -167,6 +167,22 @@
                 </div>
               </section>
 
+              <section class="panel-block">
+                <div class="section-head">
+                  <div>
+                    <p class="eyebrow">Full EXIF data</p>
+                    <h2>Metadata from the file</h2>
+                  </div>
+                  <button type="button" class="secondary-link mini-button" id="copyExifButton" disabled>Copy EXIF</button>
+                </div>
+                <div class="result-card exif-card" id="exifSurface">
+                  <div class="empty-state">
+                    <strong>No metadata loaded yet</strong>
+                    <span>Run a scan to view the full EXIF and maker-note data we can read from the file.</span>
+                  </div>
+                </div>
+              </section>
+
               <section class="status-banner" id="statusBanner" aria-live="polite">
                 Add an original camera file to get started.
               </section>
@@ -191,9 +207,11 @@
     const dropzone = document.getElementById("dropzone");
     const analyzeButton = document.getElementById("analyzeButton");
     const clearButton = document.getElementById("clearButton");
+    const copyExifButton = document.getElementById("copyExifButton");
     const statusBanner = document.getElementById("statusBanner");
     const fileSurface = document.getElementById("fileSurface");
     const resultSurface = document.getElementById("resultSurface");
+    const exifSurface = document.getElementById("exifSurface");
     const fileCount = document.getElementById("fileCount");
     const fileSize = document.getElementById("fileSize");
     const scanState = document.getElementById("scanState");
@@ -211,6 +229,7 @@
 
     let selectedFile = null;
     let parsedResult = null;
+    let parsedExif = null;
     let scanning = false;
 
     function formatBytes(bytes) {
@@ -234,13 +253,21 @@
 
     function resetResult() {
       parsedResult = null;
+      parsedExif = null;
       resultSurface.innerHTML = `
         <div class="empty-state">
           <strong>No result yet</strong>
           <span>Your shutter count result will appear here after scanning.</span>
         </div>
       `;
+      exifSurface.innerHTML = `
+        <div class="empty-state">
+          <strong>No metadata loaded yet</strong>
+          <span>Run a scan to view the full EXIF and maker-note data we can read from the file.</span>
+        </div>
+      `;
       resultState.textContent = "None";
+      copyExifButton.disabled = true;
     }
 
     function updateSummary() {
@@ -636,6 +663,76 @@
       `;
     }
 
+    function sortObjectDeep(value, seen = new WeakSet()) {
+      if (value === null || value === undefined) {
+        return value;
+      }
+
+      if (typeof value !== "object") {
+        return value;
+      }
+
+      if (seen.has(value)) {
+        return "[Circular]";
+      }
+
+      seen.add(value);
+
+      if (value instanceof Date) {
+        return value.toISOString();
+      }
+
+      if (Array.isArray(value)) {
+        return value.map((item) => sortObjectDeep(item, seen));
+      }
+
+      const output = {};
+      Object.keys(value)
+        .sort((left, right) => left.localeCompare(right))
+        .forEach((key) => {
+          const nested = value[key];
+
+          if (nested instanceof Uint8Array) {
+            output[key] = `[Uint8Array length=${nested.length}]`;
+            return;
+          }
+
+          output[key] = sortObjectDeep(nested, seen);
+        });
+      return output;
+    }
+
+    function renderExifData(exifData) {
+      parsedExif = exifData ? sortObjectDeep(exifData) : null;
+      copyExifButton.disabled = !parsedExif;
+
+      if (!parsedExif) {
+        exifSurface.innerHTML = `
+          <div class="empty-state">
+            <strong>No metadata loaded yet</strong>
+            <span>Run a scan to view the full EXIF and maker-note data we can read from the file.</span>
+          </div>
+        `;
+        return;
+      }
+
+      const prettyJson = JSON.stringify(parsedExif, null, 2);
+      exifSurface.innerHTML = `
+        <div class="result-summary">
+          <div class="meta-card">
+            <span class="eyebrow">Metadata payload</span>
+            <strong>Full EXIF and parsed tags</strong>
+            <span>This includes the standard metadata we can read in-browser from the uploaded file.</span>
+          </div>
+          <pre class="exif-pre">${prettyJson.replace(/[&<>]/g, (character) => ({
+            "&": "&amp;",
+            "<": "&lt;",
+            ">": "&gt;"
+          }[character]))}</pre>
+        </div>
+      `;
+    }
+
     function formatDate(value) {
       if (!value) return "";
 
@@ -709,6 +806,7 @@
         };
 
         renderResult(parsedResult);
+        renderExifData(tags);
         resultState.textContent = parsedResult.shutterCount ? "Found" : "Needs another file";
 
         if (parsedResult.shutterCount) {
@@ -852,6 +950,17 @@
     clearButton.addEventListener("click", () => {
       fileInput.value = "";
       setFile(null);
+    });
+
+    copyExifButton.addEventListener("click", async () => {
+      if (!parsedExif) return;
+
+      try {
+        await navigator.clipboard.writeText(JSON.stringify(parsedExif, null, 2));
+        setStatus("Full EXIF data copied to your clipboard.", "success");
+      } catch {
+        setStatus("Could not copy the EXIF data automatically, but it is still visible on the page.", "warning");
+      }
     });
 
     updateSummary();
