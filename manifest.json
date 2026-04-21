@@ -1,0 +1,24 @@
+{
+  "name": "27Tools",
+  "short_name": "27Tools",
+  "id": "/",
+  "start_url": "/",
+  "scope": "/",
+  "display": "standalone",
+  "background_color": "#050505",
+  "theme_color": "#f5a300",
+  "description": "27Tools is a growing collection of fast, simple online tools, including PNG to WEBP conversion and Sony shutter count checks.",
+  "lang": "en-GB",
+  "categories": [
+    "utilities",
+    "productivity",
+    "photo"
+  ],
+  "icons": [
+    {
+      "src": "/apple-touch-icon.png",
+      "sizes": "180x180",
+      "type": "image/png"
+    }
+  ]
+}
