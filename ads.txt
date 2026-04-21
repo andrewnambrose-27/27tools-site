@@ -1,0 +1,4 @@
+# ads.txt placeholder for 27Tools
+# Add your authorized advertising seller records here when you sign up.
+# Format reference:
+# <ad-system-domain>, <publisher-id>, <relationship>, <certification-authority-id>
