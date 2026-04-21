@@ -1,0 +1,5 @@
+Contact: https://27tools.co/about/
+Expires: 2027-04-21T00:00:00.000Z
+Preferred-Languages: en
+Canonical: https://27tools.co/.well-known/security.txt
+Policy: https://27tools.co/privacy/
