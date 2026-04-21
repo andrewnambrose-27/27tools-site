@@ -1,0 +1,12 @@
+/* TEAM */
+Developer: 27Tools
+Site: https://27tools.co
+
+/* SITE */
+Standards: HTML5, CSS3, JavaScript
+Components: Static website, browser-based tools
+Sitemap: https://27tools.co/sitemap.xml
+Robots: https://27tools.co/robots.txt
+
+/* THANKS */
+Built for fast, simple online tools.
