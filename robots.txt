@@ -1,0 +1,5 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://27tools.co/sitemap.xml
+Host: 27tools.co
