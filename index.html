@@ -22,23 +22,15 @@
   <meta name="twitter:title" content="27Tools | Fast, Simple Online Tools" />
   <meta name="twitter:description" content="27Tools is a growing collection of fast, simple online tools. Try the PNG to WEBP converter and more." />
   <meta name="twitter:image" content="https://27tools.co/og-image.png" />
+  <meta
+    http-equiv="Content-Security-Policy"
+    content="default-src 'self'; script-src 'self'; connect-src 'self' https://analytics.27tools.co; style-src 'self'; img-src 'self' data:; font-src 'self'; object-src 'none'; base-uri 'self'; frame-ancestors 'none'; form-action 'self'"
+  />
   <link rel="manifest" href="/manifest.json" />
   <link rel="stylesheet" href="style.css" />
+  <script src="/site-analytics.js" defer></script>
+  <script src="/index.js" defer></script>
 </head>
-<script>
-(function () {
-  fetch("https://analytics.27tools.co/collect", {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json"
-    },
-    body: JSON.stringify({
-      path: window.location.pathname
-    }),
-    keepalive: true
-  }).catch(() => {});
-})();
-</script>
 <body>
   <div class="cursor-glow"></div>
   <div class="particles"></div>
@@ -90,7 +82,6 @@
           src="/our-tools.png"
           alt="Our Tools"
           class="tools-title-image"
-          onerror="this.closest('.tools-title-wrap').style.display='none'"
         />
       </div>
 
@@ -134,80 +125,5 @@
       <p>&copy; 2026 27Tools - Built by 27Tools - <a href="/about/" class="footer-inline-link">About</a> - <a href="/privacy/" class="footer-inline-link">Privacy</a></p>
     </footer>
   </div>
-
-  <script>
-    const glow = document.querySelector(".cursor-glow");
-    const card = document.getElementById("tilt-card");
-    const tiltSurfaces = document.querySelectorAll(".tilt-surface");
-    const menuToggle = document.querySelector(".menu-toggle");
-    const menuPanel = document.getElementById("menuPanel");
-
-    document.addEventListener("mousemove", (e) => {
-      if (!glow) return;
-
-      glow.style.left = `${e.clientX}px`;
-      glow.style.top = `${e.clientY}px`;
-    });
-
-    function attachTilt(surface, strength) {
-      if (!surface) return;
-
-      surface.addEventListener("mousemove", (e) => {
-        const rect = surface.getBoundingClientRect();
-        const x = e.clientX - rect.left;
-        const y = e.clientY - rect.top;
-        const px = x / rect.width;
-        const py = y / rect.height;
-        const rotateY = (px - 0.5) * strength;
-        const rotateX = (0.5 - py) * strength;
-
-        surface.style.transform = `rotateX(${rotateX}deg) rotateY(${rotateY}deg) translateY(-1px)`;
-        surface.style.setProperty("--mx", `${px * 100}%`);
-        surface.style.setProperty("--my", `${py * 100}%`);
-      });
-
-      surface.addEventListener("mouseenter", () => {
-        if (glow) {
-          glow.style.width = "420px";
-          glow.style.height = "420px";
-          glow.style.opacity = "0.55";
-          glow.style.filter = "blur(58px)";
-        }
-
-        surface.style.transition =
-          "transform 0.16s ease, box-shadow 0.25s ease, border-color 0.25s ease, background 0.25s ease";
-      });
-
-      surface.addEventListener("mouseleave", () => {
-        if (glow) {
-          glow.style.width = "320px";
-          glow.style.height = "320px";
-          glow.style.opacity = "0.9";
-          glow.style.filter = "blur(40px)";
-        }
-
-        surface.style.transition =
-          "transform 0.45s ease, box-shadow 0.25s ease, border-color 0.25s ease, background 0.25s ease";
-        surface.style.transform = "rotateX(0deg) rotateY(0deg) translateY(0px)";
-      });
-    }
-
-    attachTilt(card, 1.35);
-    tiltSurfaces.forEach((surface) => attachTilt(surface, 0.8));
-
-    if (menuToggle && menuPanel) {
-      menuToggle.addEventListener("click", () => {
-        const isOpen = menuPanel.classList.toggle("is-open");
-        menuToggle.setAttribute("aria-expanded", String(isOpen));
-      });
-
-      document.addEventListener("click", (event) => {
-        if (!menuPanel.classList.contains("is-open")) return;
-        if (event.target.closest(".site-menu")) return;
-        menuPanel.classList.remove("is-open");
-        menuToggle.setAttribute("aria-expanded", "false");
-      });
-    }
-  </script>
 </body>
 </html>
