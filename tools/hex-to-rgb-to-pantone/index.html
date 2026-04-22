@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>HEX to RGB and Pantone | 27Tools</title>
+  <meta
+    name="description"
+    content="Convert Adobe HEX colour codes into RGB values and see the closest Pantone matches with live colour comparison cards."
+  />
+  <link rel="canonical" href="https://27tools.co/tools/hex-to-rgb/" />
+  <meta property="og:type" content="website" />
+  <meta property="og:site_name" content="27Tools" />
+  <meta property="og:title" content="HEX to RGB and Pantone | 27Tools" />
+  <meta property="og:description" content="Convert Adobe HEX colour codes into RGB values and see the closest Pantone matches with live colour comparison cards." />
+  <meta property="og:url" content="https://27tools.co/tools/hex-to-rgb/" />
+  <meta property="og:image" content="https://27tools.co/og-image.png" />
+  <meta property="og:image:width" content="1200" />
+  <meta property="og:image:height" content="630" />
+  <meta property="og:image:alt" content="27Tools social preview image" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="HEX to RGB and Pantone | 27Tools" />
+  <meta name="twitter:description" content="Convert Adobe HEX colour codes into RGB values and see the closest Pantone matches with live colour comparison cards." />
+  <meta name="twitter:image" content="https://27tools.co/og-image.png" />
+  <meta
+    http-equiv="Content-Security-Policy"
+    content="default-src 'self'; script-src 'self'; connect-src 'self' https://analytics.27tools.co; style-src 'self'; img-src 'self' data:; font-src 'self'; object-src 'none'; base-uri 'self'; frame-ancestors 'none'; form-action 'self'"
+  />
+  <link rel="manifest" href="/manifest.json" />
+  <link rel="stylesheet" href="./hex-to-rgb.css" />
+  <script src="/site-analytics.js" defer></script>
+  <script src="./pantone-data.js" defer></script>
+  <script src="./hex-to-rgb.js" defer></script>
+</head>
+<body>
+  <div class="cursor-glow"></div>
+  <div class="particles"></div>
+  <nav class="site-menu">
+    <button class="menu-toggle" type="button" aria-expanded="false" aria-controls="menuPanel">
+      <span></span>
+      <span></span>
+      <span></span>
+      <span class="sr-only">Open navigation menu</span>
+    </button>
+    <div class="menu-panel" id="menuPanel">
+      <a href="/" class="menu-link">Home</a>
+      <a href="/about/" class="menu-link">About Us</a>
+      <a href="/privacy/" class="menu-link">Privacy Policy</a>
+      <details class="menu-group">
+        <summary class="menu-link menu-parent">Tools</summary>
+        <div class="submenu">
+          <a href="/tools/png-to-webp/" class="submenu-link">PNG to WEBP</a>
+          <a href="/tools/camera-shutter-count/" class="submenu-link">Sony Shutter Count Tool</a>
+          <a href="/tools/hex-to-rgb/" class="submenu-link">HEX to RGB to Pantone Converter</a>
+        </div>
+      </details>
+    </div>
+  </nav>
+
+  <div class="container tool-page-container">
+    <a href="/" class="tool-page-brand" aria-label="Go to 27Tools home">
+      <img src="/logo.png" alt="27Tools logo" class="tool-page-brand-image" />
+    </a>
+
+    <section class="hero-card tool-hero-card" id="tool-page-card">
+      <div class="tool-shell">
+        <div class="tool-shell-main">
+          <div class="tool-heading">
+            <div class="status-row tool-status-row">
+              <span class="status-pill">HEX to RGB</span>
+              <span class="status-pill">Pantone matching live</span>
+              <span class="status-pill">Browser-powered</span>
+            </div>
+
+            <div class="tool-title-lockup">
+              <p class="tool-kicker">Colour converter</p>
+              <h1 class="tool-title">Convert a <span class="accent">HEX code</span> into RGB and closest Pantones</h1>
+            </div>
+
+            <p class="tool-subtitle">
+              Paste an Adobe HEX colour, get clean RGB values instantly, and compare the nearest Pantone options side by side.
+              Hover or tap any Pantone card to preview the colour against your original HEX selection.
+            </p>
+          </div>
+
+          <div class="tool-layout">
+            <aside class="tool-panel control-panel">
+              <div class="panel-block">
+                <p class="eyebrow">Input</p>
+                <div class="value-card">
+                  <label for="hexInput" class="field-label">Adobe HEX code</label>
+                  <input
+                    id="hexInput"
+                    class="text-input"
+                    type="text"
+                    inputmode="text"
+                    autocomplete="off"
+                    spellcheck="false"
+                    maxlength="7"
+                    value="#D31A3B"
+                    aria-describedby="hexHelp"
+                  />
+                  <span id="hexHelp">Use 3 or 6 hexadecimal characters, with or without the leading #.</span>
+                </div>
+              </div>
+
+              <div class="tool-actions">
+                <button type="button" class="app-link tool-button" id="copyRgbButton">Copy RGB</button>
+                <button type="button" class="secondary-link tool-button" id="copyPantoneButton">Copy Pantone</button>
+                <button type="button" class="secondary-link tool-button" id="resetButton">Reset sample</button>
+              </div>
+
+              <div class="panel-block">
+                <p class="eyebrow">Live output</p>
+                <div class="stats-grid">
+                  <div class="stat-card">
+                    <span class="stat-label">HEX</span>
+                    <strong id="hexValue">#D31A3B</strong>
+                  </div>
+                  <div class="stat-card">
+                    <span class="stat-label">RGB</span>
+                    <strong id="rgbValue">rgb(211, 26, 59)</strong>
+                  </div>
+                  <div class="stat-card">
+                    <span class="stat-label">Red</span>
+                    <strong id="redValue">211</strong>
+                  </div>
+                  <div class="stat-card">
+                    <span class="stat-label">Green</span>
+                    <strong id="greenValue">26</strong>
+                  </div>
+                  <div class="stat-card">
+                    <span class="stat-label">Blue</span>
+                    <strong id="blueValue">59</strong>
+                  </div>
+                  <div class="stat-card">
+                    <span class="stat-label">Best Pantone</span>
+                    <strong id="bestPantoneValue">1795 C</strong>
+                  </div>
+                </div>
+              </div>
+
+              <div class="panel-block">
+                <p class="eyebrow">About this tool</p>
+                <div class="note-card">
+                  <p>
+                    Pantone matches are calculated from the imported swatch RGB data you provided and ranked by colour distance.
+                    That makes this a fast visual matching tool rather than an official Pantone lookup.
+                  </p>
+                </div>
+              </div>
+            </aside>
+
+            <div class="tool-panel workspace-panel">
+              <section class="panel-block">
+                <div class="section-head">
+                  <div>
+                    <p class="eyebrow">Colour preview</p>
+                    <h2>Compare your colour with the current Pantone match</h2>
+                  </div>
+                  <span class="panel-hint">Hover or tap a card to compare</span>
+                </div>
+                <div class="preview-grid">
+                  <article class="preview-card">
+                    <div class="swatch" id="hexSwatch" aria-hidden="true"></div>
+                    <div class="preview-copy">
+                      <span class="preview-label">Original HEX</span>
+                      <strong id="hexPreviewValue">#D31A3B</strong>
+                      <span id="hexPreviewMeta">rgb(211, 26, 59)</span>
+                    </div>
+                  </article>
+                  <article class="preview-card">
+                    <div class="swatch" id="pantoneSwatch" aria-hidden="true"></div>
+                    <div class="preview-copy">
+                      <span class="preview-label">Pantone comparison</span>
+                      <strong id="pantonePreviewValue">1795 C</strong>
+                      <span id="pantonePreviewMeta">rgb(246, 52, 63) - Match score 55%</span>
+                    </div>
+                  </article>
+                </div>
+              </section>
+
+              <section class="panel-block">
+                <div class="section-head">
+                  <div>
+                    <p class="eyebrow">Pantone matches</p>
+                    <h2>Closest options from the Pantone dataset</h2>
+                  </div>
+                  <span class="panel-hint" id="pantoneSummary">Showing the 18 closest matches</span>
+                </div>
+                <div class="pantone-grid" id="pantoneResults">
+                  <div class="empty-state compact-empty">
+                    <strong>Loading Pantone data</strong>
+                    <span>Your closest matches will appear here.</span>
+                  </div>
+                </div>
+              </section>
+
+              <section class="status-banner" id="statusBanner" aria-live="polite">
+                Enter a HEX colour to see the RGB conversion and closest Pantone matches.
+              </section>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <footer>
+      <p>&copy; 2026 27Tools - Built by 27Tools - <a href="/about/" class="footer-inline-link">About</a> - <a href="/privacy/" class="footer-inline-link">Privacy</a></p>
+    </footer>
+  </div>
+</body>
+</html>
