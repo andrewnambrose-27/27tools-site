@@ -554,8 +554,10 @@ body::after {
 .pantone-match-card {
   appearance: none;
   -webkit-appearance: none;
-  display: block;
+  display: flex;
+  flex-direction: column;
   width: 100%;
+  height: 100%;
   padding: 0;
   overflow: hidden;
   text-align: left;
@@ -629,7 +631,10 @@ body::after {
 
 .pantone-match-copy {
   display: grid;
+  align-content: start;
   gap: 6px;
+  flex: 1;
+  min-height: 120px;
   padding: 14px 14px 16px;
   text-align: center;
 }
