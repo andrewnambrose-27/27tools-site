@@ -180,6 +180,7 @@ body::after {
   text-decoration: none;
   font-weight: 600;
   font-size: 15px;
+  text-align: left;
   background: transparent;
   border: 0;
 }
@@ -220,6 +221,7 @@ body::after {
 .submenu-link {
   font-size: 14px;
   color: #cfd7df;
+  justify-content: flex-start;
 }
 
 .tool-page-brand {
