@@ -1,0 +1,5 @@
+# 27Tools
+
+> 27Tools is a growing collection of fast, simple browser-based utility tools.
+
+See the canonical file at https://27tools.co/llms.txt
