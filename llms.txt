@@ -1,0 +1,26 @@
+# 27Tools
+
+> 27Tools is a growing collection of fast, simple browser-based utility tools.
+
+## Summary
+
+27Tools publishes lightweight online tools that are designed to work quickly in a modern browser. Current tools include PNG to WEBP conversion, Sony shutter count lookup from original files, and HEX to RGB with Pantone-style colour matching. The main site also includes About and Privacy pages that explain the project and data handling.
+
+## Tools
+
+- [PNG to WEBP](https://27tools.co/tools/png-to-webp/) Convert PNG images to WEBP in the browser with batch support and quality control.
+- [Sony Shutter Count Tool](https://27tools.co/tools/camera-shutter-count/) Read Sony shutter count metadata from an original JPG or ARW file in the browser.
+- [HEX to RGB and Pantone](https://27tools.co/tools/hex-to-rgb-to-pantone/) Convert HEX colours to RGB and compare the closest Pantone-style matches.
+
+## Site Pages
+
+- [Home](https://27tools.co/) Main index page for the tool collection.
+- [About 27Tools](https://27tools.co/about/) Background on the project and its goals.
+- [Privacy Policy](https://27tools.co/privacy/) Privacy and analytics details for the site and tools.
+
+## Machine-Readable Signals
+
+- [Sitemap](https://27tools.co/sitemap.xml) Canonical sitemap of key public URLs.
+- [Schema Graph](https://27tools.co/schema.json) Aggregated JSON-LD graph describing the website, organization, and tool pages.
+- [LLMs Full](https://27tools.co/llms-full.txt) Expanded AI-readable catalog with more page and tool detail.
+- [Robots](https://27tools.co/robots.txt) Crawl guidance for bots and search engines.

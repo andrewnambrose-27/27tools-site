@@ -1,0 +1,68 @@
+# 27Tools
+
+> 27Tools is a growing collection of fast, simple browser-based utility tools.
+
+## Site Overview
+
+27Tools focuses on lightweight utilities that work directly in the browser where possible. The site currently highlights privacy-friendly workflows, small friction-free interfaces, and tasks that are useful for creators, photographers, and general web users.
+
+Primary site URL:
+- https://27tools.co/
+
+Supporting pages:
+- https://27tools.co/about/
+- https://27tools.co/privacy/
+
+Machine-readable endpoints:
+- https://27tools.co/sitemap.xml
+- https://27tools.co/schema.json
+- https://27tools.co/robots.txt
+- https://27tools.co/llms.txt
+
+## Tools
+
+### PNG to WEBP
+
+URL:
+- https://27tools.co/tools/png-to-webp/
+
+Purpose:
+- Convert PNG images into WEBP in the browser.
+
+Key details:
+- Batch conversion support.
+- Adjustable WEBP quality.
+- Local browser-side workflow rather than server uploads.
+- Useful for transparent PNGs, screenshots, exported graphics, and website assets.
+
+### Sony Shutter Count Tool
+
+URL:
+- https://27tools.co/tools/camera-shutter-count/
+
+Purpose:
+- Read Sony shutter count metadata from an original Sony JPG, JPEG, or ARW file.
+
+Key details:
+- Designed for original camera files.
+- Intended for browser-side metadata reading.
+- Useful when checking camera wear before buying or selling.
+
+### HEX to RGB and Pantone
+
+URL:
+- https://27tools.co/tools/hex-to-rgb-to-pantone/
+
+Purpose:
+- Convert HEX colours into RGB values and compare closest Pantone-style matches.
+
+Key details:
+- Live HEX validation.
+- RGB output with preview.
+- Closest-match comparison cards for Pantone-style results.
+
+## Publishing Notes
+
+- Canonical domain: https://27tools.co
+- Public pages are linked through the homepage, menu, and sitemap.
+- Structured data is also available inline on key pages and aggregated in `schema.json`.

@@ -1,0 +1,173 @@
+{
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "WebSite",
+      "@id": "https://27tools.co/#website",
+      "url": "https://27tools.co/",
+      "name": "27Tools",
+      "description": "27Tools is a growing collection of fast, simple online tools that run in the browser.",
+      "publisher": {
+        "@id": "https://27tools.co/#organization"
+      },
+      "inLanguage": "en"
+    },
+    {
+      "@type": "Organization",
+      "@id": "https://27tools.co/#organization",
+      "name": "27Tools",
+      "url": "https://27tools.co/",
+      "logo": {
+        "@type": "ImageObject",
+        "url": "https://27tools.co/logo.png"
+      }
+    },
+    {
+      "@type": "CollectionPage",
+      "@id": "https://27tools.co/#webpage",
+      "url": "https://27tools.co/",
+      "name": "27Tools | Fast, Simple Online Tools",
+      "description": "Browse online tools from 27Tools, including PNG to WEBP conversion, Sony shutter count checks, and HEX to RGB colour conversion.",
+      "isPartOf": {
+        "@id": "https://27tools.co/#website"
+      },
+      "about": {
+        "@id": "https://27tools.co/#organization"
+      },
+      "mainEntity": [
+        {
+          "@id": "https://27tools.co/tools/png-to-webp/#app"
+        },
+        {
+          "@id": "https://27tools.co/tools/camera-shutter-count/#app"
+        },
+        {
+          "@id": "https://27tools.co/tools/hex-to-rgb-to-pantone/#app"
+        }
+      ]
+    },
+    {
+      "@type": "AboutPage",
+      "@id": "https://27tools.co/about/#webpage",
+      "url": "https://27tools.co/about/",
+      "name": "About 27Tools",
+      "description": "Learn more about 27Tools, the thinking behind it, and the goal of building useful tools that are fast and simple.",
+      "isPartOf": {
+        "@id": "https://27tools.co/#website"
+      },
+      "about": {
+        "@id": "https://27tools.co/#organization"
+      }
+    },
+    {
+      "@type": "WebPage",
+      "@id": "https://27tools.co/privacy/#webpage",
+      "url": "https://27tools.co/privacy/",
+      "name": "Privacy Policy | 27Tools",
+      "description": "Read the 27Tools privacy policy to understand what limited information may be collected and how the website is operated.",
+      "isPartOf": {
+        "@id": "https://27tools.co/#website"
+      },
+      "about": {
+        "@id": "https://27tools.co/#organization"
+      }
+    },
+    {
+      "@type": "WebApplication",
+      "@id": "https://27tools.co/tools/png-to-webp/#app",
+      "name": "PNG to WEBP",
+      "url": "https://27tools.co/tools/png-to-webp/",
+      "applicationCategory": "MultimediaApplication",
+      "operatingSystem": "Any",
+      "browserRequirements": "Requires a modern web browser with JavaScript enabled.",
+      "image": "https://27tools.co/png-to-webp.png",
+      "description": "Convert PNG images to WEBP directly in your browser with batch support, quality control, and instant downloads.",
+      "isAccessibleForFree": true,
+      "offers": {
+        "@type": "Offer",
+        "price": "0",
+        "priceCurrency": "USD"
+      },
+      "publisher": {
+        "@id": "https://27tools.co/#organization"
+      }
+    },
+    {
+      "@type": "WebPage",
+      "@id": "https://27tools.co/tools/png-to-webp/#webpage",
+      "url": "https://27tools.co/tools/png-to-webp/",
+      "name": "PNG to WEBP | 27Tools",
+      "description": "Convert PNG images to WEBP directly in your browser with batch support, quality control, and instant downloads.",
+      "isPartOf": {
+        "@id": "https://27tools.co/#website"
+      },
+      "mainEntity": {
+        "@id": "https://27tools.co/tools/png-to-webp/#app"
+      }
+    },
+    {
+      "@type": "WebApplication",
+      "@id": "https://27tools.co/tools/camera-shutter-count/#app",
+      "name": "Sony Shutter Count Tool",
+      "url": "https://27tools.co/tools/camera-shutter-count/",
+      "applicationCategory": "UtilitiesApplication",
+      "operatingSystem": "Any",
+      "browserRequirements": "Requires a modern web browser with JavaScript enabled.",
+      "description": "Check the shutter count of a Sony camera from an original JPG or ARW file, right in your browser.",
+      "isAccessibleForFree": true,
+      "offers": {
+        "@type": "Offer",
+        "price": "0",
+        "priceCurrency": "USD"
+      },
+      "publisher": {
+        "@id": "https://27tools.co/#organization"
+      }
+    },
+    {
+      "@type": "WebPage",
+      "@id": "https://27tools.co/tools/camera-shutter-count/#webpage",
+      "url": "https://27tools.co/tools/camera-shutter-count/",
+      "name": "Sony Shutter Count Tool | 27Tools",
+      "description": "Check the shutter count of a Sony camera from an original JPG or ARW file, right in your browser.",
+      "isPartOf": {
+        "@id": "https://27tools.co/#website"
+      },
+      "mainEntity": {
+        "@id": "https://27tools.co/tools/camera-shutter-count/#app"
+      }
+    },
+    {
+      "@type": "WebApplication",
+      "@id": "https://27tools.co/tools/hex-to-rgb-to-pantone/#app",
+      "name": "HEX to RGB and Pantone",
+      "url": "https://27tools.co/tools/hex-to-rgb-to-pantone/",
+      "applicationCategory": "DesignApplication",
+      "operatingSystem": "Any",
+      "browserRequirements": "Requires a modern web browser with JavaScript enabled.",
+      "description": "Convert Adobe HEX colour codes into RGB values and see the closest Pantone matches with live colour comparison cards.",
+      "isAccessibleForFree": true,
+      "offers": {
+        "@type": "Offer",
+        "price": "0",
+        "priceCurrency": "USD"
+      },
+      "publisher": {
+        "@id": "https://27tools.co/#organization"
+      }
+    },
+    {
+      "@type": "WebPage",
+      "@id": "https://27tools.co/tools/hex-to-rgb-to-pantone/#webpage",
+      "url": "https://27tools.co/tools/hex-to-rgb-to-pantone/",
+      "name": "HEX to RGB and Pantone | 27Tools",
+      "description": "Convert Adobe HEX colour codes into RGB values and see the closest Pantone matches with live colour comparison cards.",
+      "isPartOf": {
+        "@id": "https://27tools.co/#website"
+      },
+      "mainEntity": {
+        "@id": "https://27tools.co/tools/hex-to-rgb-to-pantone/#app"
+      }
+    }
+  ]
+}
