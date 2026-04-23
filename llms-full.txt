@@ -48,6 +48,20 @@ Key details:
 - Intended for browser-side metadata reading.
 - Useful when checking camera wear before buying or selling.
 
+### Canon Shutter Count Tool
+
+URL:
+- https://27tools.co/tools/canon-shutter-count/
+
+Purpose:
+- Read Canon shutter count metadata from an original Canon CR3 file.
+
+Key details:
+- Designed for original Canon CR3 files.
+- Keeps the metadata viewer available even when a reliable shutter count field is not exposed.
+- Intended for browser-side metadata reading.
+- Useful when checking camera wear before buying or selling.
+
 ### HEX to RGB and Pantone
 
 URL:

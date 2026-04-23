@@ -27,7 +27,7 @@
       "@id": "https://27tools.co/#webpage",
       "url": "https://27tools.co/",
       "name": "27Tools | Fast, Simple Online Tools",
-      "description": "Browse online tools from 27Tools, including PNG to WEBP conversion, Sony shutter count checks, and HEX to RGB colour conversion.",
+      "description": "Browse online tools from 27Tools, including PNG to WEBP conversion, Sony and Canon shutter count checks, and HEX to RGB colour conversion.",
       "isPartOf": {
         "@id": "https://27tools.co/#website"
       },
@@ -40,6 +40,9 @@
         },
         {
           "@id": "https://27tools.co/tools/camera-shutter-count/#app"
+        },
+        {
+          "@id": "https://27tools.co/tools/canon-shutter-count/#app"
         },
         {
           "@id": "https://27tools.co/tools/hex-to-rgb-to-pantone/#app"
@@ -135,6 +138,38 @@
       },
       "mainEntity": {
         "@id": "https://27tools.co/tools/camera-shutter-count/#app"
+      }
+    },
+    {
+      "@type": "WebApplication",
+      "@id": "https://27tools.co/tools/canon-shutter-count/#app",
+      "name": "Canon Shutter Count Tool",
+      "url": "https://27tools.co/tools/canon-shutter-count/",
+      "applicationCategory": "UtilitiesApplication",
+      "operatingSystem": "Any",
+      "browserRequirements": "Requires a modern web browser with JavaScript enabled.",
+      "description": "Check the shutter count of a Canon camera from an original CR3 file, right in your browser.",
+      "isAccessibleForFree": true,
+      "offers": {
+        "@type": "Offer",
+        "price": "0",
+        "priceCurrency": "USD"
+      },
+      "publisher": {
+        "@id": "https://27tools.co/#organization"
+      }
+    },
+    {
+      "@type": "WebPage",
+      "@id": "https://27tools.co/tools/canon-shutter-count/#webpage",
+      "url": "https://27tools.co/tools/canon-shutter-count/",
+      "name": "Canon Shutter Count Tool | 27Tools",
+      "description": "Check the shutter count of a Canon camera from an original CR3 file, right in your browser.",
+      "isPartOf": {
+        "@id": "https://27tools.co/#website"
+      },
+      "mainEntity": {
+        "@id": "https://27tools.co/tools/canon-shutter-count/#app"
       }
     },
     {

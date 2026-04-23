@@ -7,7 +7,7 @@
   "display": "standalone",
   "background_color": "#050505",
   "theme_color": "#f5a300",
-  "description": "27Tools is a growing collection of fast, simple online tools, including PNG to WEBP conversion and Sony shutter count checks.",
+  "description": "27Tools is a growing collection of fast, simple online tools, including PNG to WEBP conversion, Sony and Canon shutter count checks, and HEX to RGB colour conversion.",
   "lang": "en-GB",
   "categories": [
     "utilities",
