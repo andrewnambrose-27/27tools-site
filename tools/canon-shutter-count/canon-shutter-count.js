@@ -193,6 +193,126 @@ function findAsciiSequence(bytes, text, start = 0) {
   return -1;
 }
 
+function getIsoBoxType(bytes, offset) {
+  return String.fromCharCode(bytes[offset + 4], bytes[offset + 5], bytes[offset + 6], bytes[offset + 7]);
+}
+
+function getIsoBoxSize(view, offset) {
+  const size32 = view.getUint32(offset, false);
+
+  if (size32 === 1) {
+    const high = view.getUint32(offset + 8, false);
+    const low = view.getUint32(offset + 12, false);
+    return high * 4294967296 + low;
+  }
+
+  return size32;
+}
+
+function listIsoChildBoxes(bytes, view, boxStart, boxEnd, extraHeader = 0) {
+  const children = [];
+  let offset = boxStart + 8 + extraHeader;
+
+  while (offset + 8 <= boxEnd && offset + 8 <= view.byteLength) {
+    const size = getIsoBoxSize(view, offset);
+    const type = getIsoBoxType(bytes, offset);
+
+    if (!size || size < 8) {
+      break;
+    }
+
+    const end = offset + size;
+    if (end > boxEnd || end > view.byteLength) {
+      break;
+    }
+
+    children.push({
+      type,
+      start: offset,
+      size,
+      end
+    });
+
+    offset = end;
+  }
+
+  return children;
+}
+
+function findCtmdSample(buffer) {
+  const bytes = new Uint8Array(buffer);
+  const view = new DataView(buffer);
+  const moovIndex = findAsciiSequence(bytes, "moov");
+
+  if (moovIndex < 4) {
+    return null;
+  }
+
+  const moovStart = moovIndex - 4;
+  const moovSize = getIsoBoxSize(view, moovStart);
+  if (!moovSize || moovStart + moovSize > view.byteLength) {
+    return null;
+  }
+
+  const tracks = listIsoChildBoxes(bytes, view, moovStart, moovStart + moovSize)
+    .filter((box) => box.type === "trak");
+
+  for (const track of tracks) {
+    const mdia = listIsoChildBoxes(bytes, view, track.start, track.end).find((box) => box.type === "mdia");
+    if (!mdia) continue;
+
+    const minf = listIsoChildBoxes(bytes, view, mdia.start, mdia.end).find((box) => box.type === "minf");
+    if (!minf) continue;
+
+    const stbl = listIsoChildBoxes(bytes, view, minf.start, minf.end).find((box) => box.type === "stbl");
+    if (!stbl) continue;
+
+    const stblChildren = listIsoChildBoxes(bytes, view, stbl.start, stbl.end);
+    const stsd = stblChildren.find((box) => box.type === "stsd");
+    const stsz = stblChildren.find((box) => box.type === "stsz");
+    const co64 = stblChildren.find((box) => box.type === "co64");
+    const stco = stblChildren.find((box) => box.type === "stco");
+
+    if (!stsd || !stsz || (!co64 && !stco)) {
+      continue;
+    }
+
+    const sampleEntries = listIsoChildBoxes(bytes, view, stsd.start, stsd.end, 8);
+    const hasCtmdEntry = sampleEntries.some((entry) => entry.type === "CTMD");
+    if (!hasCtmdEntry) {
+      continue;
+    }
+
+    const sampleCount = view.getUint32(stsz.start + 16, false);
+    if (sampleCount < 1) {
+      continue;
+    }
+
+    const defaultSampleSize = view.getUint32(stsz.start + 12, false);
+    const sampleSize = defaultSampleSize || view.getUint32(stsz.start + 20, false);
+    if (!sampleSize) {
+      continue;
+    }
+
+    let sampleOffset = null;
+    if (co64) {
+      const high = view.getUint32(co64.start + 16, false);
+      const low = view.getUint32(co64.start + 20, false);
+      sampleOffset = high * 4294967296 + low;
+    } else if (stco) {
+      sampleOffset = view.getUint32(stco.start + 16, false);
+    }
+
+    if (!Number.isFinite(sampleOffset) || sampleOffset < 0 || sampleOffset + sampleSize > view.byteLength) {
+      continue;
+    }
+
+    return bytes.slice(sampleOffset, sampleOffset + sampleSize);
+  }
+
+  return null;
+}
+
 function getCr3TiffBaseOffset(buffer, marker) {
   const bytes = new Uint8Array(buffer);
   const markerIndex = findAsciiSequence(bytes, marker);
@@ -405,21 +525,88 @@ function resolveCanonCameraInfoOffset(model) {
     .trim();
 
   if (/EOS R6 MARK II|EOS R6M2|EOS R8|EOS R50/.test(normalized)) {
-    return 3368;
-  }
-
-  if (/EOS R5 MARK II/.test(normalized)) {
-    return 1691;
+    return 3369;
   }
 
   if (/EOS R5|EOS R6/.test(normalized)) {
-    return 2800;
+    return 2801;
   }
 
   return null;
 }
 
+function parseCtmdCanonMakerNote(buffer, model) {
+  const offset = resolveCanonCameraInfoOffset(model);
+  const sample = findCtmdSample(buffer);
+
+  if (!sample || !Number.isInteger(offset)) {
+    return null;
+  }
+
+  let metadataFound = false;
+  let position = 0;
+
+  while (position + 12 <= sample.length) {
+    const size = new DataView(sample.buffer, sample.byteOffset + position, 4).getUint32(0, true);
+    const type = new DataView(sample.buffer, sample.byteOffset + position + 4, 2).getUint16(0, true);
+
+    if (size < 12 || position + size > sample.length) {
+      break;
+    }
+
+    if (type === 8) {
+      const payload = sample.slice(position + 12, position + size);
+      const embeddedTiffOffset = findAsciiSequence(payload, "II*\u0000");
+
+      if (embeddedTiffOffset !== -1) {
+        const embeddedBuffer = payload.buffer.slice(
+          payload.byteOffset + embeddedTiffOffset,
+          payload.byteOffset + payload.length
+        );
+
+        try {
+          const reader = createTiffReader(embeddedBuffer, 0);
+          const ifd0Offset = reader.readUint32(4);
+          const makerEntries = reader.readIfdEntries(ifd0Offset);
+          const makerMap = new Map(makerEntries.map((entry) => [entry.tag, entry]));
+          const cameraInfoEntry = makerMap.get(0x000d);
+
+          metadataFound = makerEntries.length > 0;
+
+          if (cameraInfoEntry) {
+            const bytes = getEntryBytes(cameraInfoEntry, reader);
+            if (bytes && offset + 4 <= bytes.length) {
+              const value = new DataView(bytes.buffer, bytes.byteOffset, bytes.byteLength).getUint32(offset, true);
+
+              if (value > 0 && value < 10000000) {
+                return {
+                  metadataFound: true,
+                  shutterCount: value,
+                  sourceTag: `Canon CTMD type 8 CameraInfo tag 0x000d @ ${offset}`
+                };
+              }
+            }
+          }
+        } catch (error) {
+          console.warn("Timed Canon metadata could not be parsed.", error);
+        }
+      }
+    }
+
+    position += size;
+  }
+
+  return metadataFound
+    ? { metadataFound: true, shutterCount: null, sourceTag: "" }
+    : null;
+}
+
 function parseCanonMakerNote(buffer, model) {
+  const timedMakerNoteResult = parseCtmdCanonMakerNote(buffer, model);
+  if (timedMakerNoteResult) {
+    return timedMakerNoteResult;
+  }
+
   let reader;
 
   try {
@@ -437,13 +624,12 @@ function parseCanonMakerNote(buffer, model) {
   if (cameraInfoEntry && Number.isInteger(offset)) {
     const bytes = getEntryBytes(cameraInfoEntry, reader);
     if (bytes && offset + 4 <= bytes.length) {
-      const view = new DataView(bytes.buffer, bytes.byteOffset, bytes.byteLength);
-      const value = view.getUint32(offset, true);
+      const value = new DataView(bytes.buffer, bytes.byteOffset, bytes.byteLength).getUint32(offset, true);
       if (value > 0 && value < 10000000) {
         return {
           metadataFound: true,
           shutterCount: value,
-          sourceTag: `Canon CameraInfo tag 0x000d @ ${offset}`
+          sourceTag: `Canon static CameraInfo tag 0x000d @ ${offset}`
         };
       }
     }
