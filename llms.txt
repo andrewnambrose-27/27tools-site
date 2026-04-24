@@ -4,7 +4,7 @@
 
 ## Summary
 
-27Tools publishes lightweight online tools that are designed to work quickly in a modern browser. Current tools include PNG to WEBP conversion, Sony shutter count lookup, Canon shutter count lookup from original CR3 files, and HEX to RGB with Pantone-style colour matching. The main site also includes About and Privacy pages that explain the project and data handling.
+27Tools publishes lightweight online tools that are designed to work quickly in a modern browser. Current tools include PNG to WEBP conversion, Sony shutter count lookup, Canon shutter count lookup from original CR3 files, HEX to RGB with Pantone-style colour matching, and Unix timestamp conversion. The main site also includes About and Privacy pages that explain the project and data handling.
 
 ## Tools
 
@@ -12,6 +12,7 @@
 - [Sony Shutter Count Tool](https://27tools.co/tools/camera-shutter-count/) Read Sony shutter count metadata from an original JPG or ARW file in the browser.
 - [Canon Shutter Count Tool](https://27tools.co/tools/canon-shutter-count/) Read Canon shutter count metadata from an original CR3 file in the browser while keeping a full metadata viewer available.
 - [HEX to RGB and Pantone](https://27tools.co/tools/hex-to-rgb-to-pantone/) Convert HEX colours to RGB and compare the closest Pantone-style matches.
+- [Unix Timestamp Converter](https://27tools.co/tools/timestamp-converter/) Convert Unix timestamps to readable dates, convert dates back to epoch values, and compare common durations in seconds and milliseconds.
 
 ## Site Pages
 

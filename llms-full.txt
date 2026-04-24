@@ -4,7 +4,7 @@
 
 ## Site Overview
 
-27Tools focuses on lightweight utilities that work directly in the browser where possible. The site currently highlights privacy-friendly workflows, small friction-free interfaces, and tasks that are useful for creators, photographers, and general web users.
+27Tools focuses on lightweight utilities that work directly in the browser where possible. The site currently highlights privacy-friendly workflows, small friction-free interfaces, and tasks that are useful for creators, photographers, developers, and general web users.
 
 Primary site URL:
 - https://27tools.co/
@@ -74,6 +74,20 @@ Key details:
 - Live HEX validation.
 - RGB output with preview.
 - Closest-match comparison cards for Pantone-style results.
+
+### Unix Timestamp Converter
+
+URL:
+- https://27tools.co/tools/timestamp-converter/
+
+Purpose:
+- Convert Unix timestamps into readable dates and convert dates back into epoch timestamp values.
+
+Key details:
+- Live current Unix timestamp.
+- Supports seconds, milliseconds, microseconds, and nanoseconds.
+- Shows local time, UTC, ISO 8601, RFC 2822, RFC 3339, Unix seconds, and Unix milliseconds.
+- Includes a quick reference table for common durations such as 1 hour, 1 day, 1 week, 1 month, and 1 year.
 
 ## Publishing Notes
 

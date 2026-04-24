@@ -27,7 +27,7 @@
       "@id": "https://27tools.co/#webpage",
       "url": "https://27tools.co/",
       "name": "27Tools | Fast, Simple Online Tools",
-      "description": "Browse online tools from 27Tools, including PNG to WEBP conversion, Sony and Canon shutter count checks, and HEX to RGB colour conversion.",
+      "description": "Browse online tools from 27Tools, including PNG to WEBP conversion, Sony and Canon shutter count checks, HEX to RGB colour conversion, and Unix timestamp conversion.",
       "isPartOf": {
         "@id": "https://27tools.co/#website"
       },
@@ -46,6 +46,9 @@
         },
         {
           "@id": "https://27tools.co/tools/hex-to-rgb-to-pantone/#app"
+        },
+        {
+          "@id": "https://27tools.co/tools/timestamp-converter/#app"
         }
       ]
     },
@@ -202,6 +205,38 @@
       },
       "mainEntity": {
         "@id": "https://27tools.co/tools/hex-to-rgb-to-pantone/#app"
+      }
+    },
+    {
+      "@type": "WebApplication",
+      "@id": "https://27tools.co/tools/timestamp-converter/#app",
+      "name": "Unix Timestamp Converter",
+      "url": "https://27tools.co/tools/timestamp-converter/",
+      "applicationCategory": "UtilitiesApplication",
+      "operatingSystem": "Any",
+      "browserRequirements": "Requires a modern web browser with JavaScript enabled.",
+      "description": "Convert Unix timestamps to readable dates, turn dates into epoch timestamps, and compare common time durations in seconds and milliseconds.",
+      "isAccessibleForFree": true,
+      "offers": {
+        "@type": "Offer",
+        "price": "0",
+        "priceCurrency": "USD"
+      },
+      "publisher": {
+        "@id": "https://27tools.co/#organization"
+      }
+    },
+    {
+      "@type": "WebPage",
+      "@id": "https://27tools.co/tools/timestamp-converter/#webpage",
+      "url": "https://27tools.co/tools/timestamp-converter/",
+      "name": "Unix Timestamp Converter | 27Tools",
+      "description": "Convert Unix timestamps to readable dates, turn dates into epoch timestamps, and compare common time durations in seconds and milliseconds.",
+      "isPartOf": {
+        "@id": "https://27tools.co/#website"
+      },
+      "mainEntity": {
+        "@id": "https://27tools.co/tools/timestamp-converter/#app"
       }
     }
   ]

@@ -6,13 +6,13 @@
   <title>27Tools | Fast, Simple Online Tools</title>
   <meta
     name="description"
-    content="27Tools is a growing collection of fast, simple online tools. Try the PNG to WEBP converter, Sony and Canon shutter count checkers, HEX to RGB tool, and more."
+    content="27Tools is a growing collection of fast, simple online tools. Try the PNG to WEBP converter, shutter count checkers, HEX to RGB tool, Unix timestamp converter, and more."
   />
   <link rel="canonical" href="https://27tools.co/" />
   <meta property="og:type" content="website" />
   <meta property="og:site_name" content="27Tools" />
   <meta property="og:title" content="27Tools | Fast, Simple Online Tools" />
-  <meta property="og:description" content="27Tools is a growing collection of fast, simple online tools. Try the PNG to WEBP converter, Sony and Canon shutter count checkers, HEX to RGB tool, and more." />
+  <meta property="og:description" content="27Tools is a growing collection of fast, simple online tools. Try the PNG to WEBP converter, shutter count checkers, HEX to RGB tool, Unix timestamp converter, and more." />
   <meta property="og:url" content="https://27tools.co/" />
   <meta property="og:image" content="https://27tools.co/og-image.png" />
   <meta property="og:image:width" content="1200" />
@@ -20,7 +20,7 @@
   <meta property="og:image:alt" content="27Tools social preview image" />
   <meta name="twitter:card" content="summary_large_image" />
   <meta name="twitter:title" content="27Tools | Fast, Simple Online Tools" />
-  <meta name="twitter:description" content="27Tools is a growing collection of fast, simple online tools. Try the PNG to WEBP converter, Sony and Canon shutter count checkers, HEX to RGB tool, and more." />
+  <meta name="twitter:description" content="27Tools is a growing collection of fast, simple online tools. Try the PNG to WEBP converter, shutter count checkers, HEX to RGB tool, Unix timestamp converter, and more." />
   <meta name="twitter:image" content="https://27tools.co/og-image.png" />
   <script type="application/ld+json">
     {
@@ -52,7 +52,7 @@
           "@id": "https://27tools.co/#webpage",
           "url": "https://27tools.co/",
           "name": "27Tools | Fast, Simple Online Tools",
-          "description": "Browse online tools from 27Tools, including PNG to WEBP conversion, Sony and Canon shutter count checks, and HEX to RGB colour conversion.",
+          "description": "Browse online tools from 27Tools, including PNG to WEBP conversion, Sony and Canon shutter count checks, HEX to RGB colour conversion, and Unix timestamp conversion.",
           "isPartOf": {
             "@id": "https://27tools.co/#website"
           },
@@ -71,6 +71,9 @@
             },
             {
               "@id": "https://27tools.co/tools/hex-to-rgb-to-pantone/#app"
+            },
+            {
+              "@id": "https://27tools.co/tools/timestamp-converter/#app"
             }
           ]
         }
@@ -107,6 +110,7 @@
           <a href="/tools/camera-shutter-count/" class="submenu-link">Sony Shutter Count Tool</a>
           <a href="/tools/canon-shutter-count/" class="submenu-link">Canon Shutter Count Tool</a>
           <a href="/tools/hex-to-rgb-to-pantone/" class="submenu-link">HEX to RGB to Pantone Converter</a>
+          <a href="/tools/timestamp-converter/" class="submenu-link">Unix Timestamp Converter</a>
         </div>
       </details>
     </div>
@@ -115,7 +119,7 @@
   <div class="container">
     <div class="hero-card" id="tilt-card">
       <div class="status-row">
-        <span class="status-pill">4 tools live</span>
+        <span class="status-pill">5 tools live</span>
         <span class="status-pill">Simple tools, done well</span>
         <span class="status-pill">Runs in your browser</span>
       </div>
@@ -124,7 +128,7 @@
 
       <p class="tagline">
         A growing collection of useful tools, built to be fast, simple, and genuinely helpful.
-        Convert PNG files, check camera shutter counts, convert HEX colours to RGB, and keep everything quick and straightforward.
+        Convert PNG files, check camera shutter counts, convert HEX colours to RGB, translate Unix timestamps, and keep everything quick and straightforward.
       </p>
 
       <div class="button-row">
@@ -132,6 +136,7 @@
         <a href="/tools/camera-shutter-count/" class="secondary-link">Open Sony Shutter Tool</a>
         <a href="/tools/canon-shutter-count/" class="secondary-link">Open Canon Shutter Tool</a>
         <a href="/tools/hex-to-rgb-to-pantone/" class="secondary-link">Open HEX to RGB to Pantone Converter</a>
+        <a href="/tools/timestamp-converter/" class="secondary-link">Open Timestamp Converter</a>
       </div>
     </div>
 
@@ -203,14 +208,31 @@
         <h2>Convert an Adobe HEX colour code into clean RGB values</h2>
         <p>
           Paste a HEX code, validate it instantly, copy the RGB output, and compare the colour in a live preview panel.
-          The Pantone matching experience is staged next in this workflow.
+          Closest Pantone-style matches appear as visual comparison cards.
         </p>
         <div class="tool-meta">
           <span>Live validation</span>
           <span>Colour preview</span>
-          <span>Pantone step coming next</span>
+          <span>Pantone-style matches</span>
         </div>
         <a href="/tools/hex-to-rgb-to-pantone/" class="tool-link">Launch tool</a>
+      </article>
+      <article class="tool-card tilt-surface">
+        <div class="tool-card-top">
+          <span class="tool-badge">New Tool</span>
+          <span class="tool-format">Unix Timestamp Converter</span>
+        </div>
+        <h2>Convert Unix timestamps into readable dates</h2>
+        <p>
+          Paste a timestamp in seconds, milliseconds, microseconds, or nanoseconds, convert dates back to epoch values,
+          and copy common UTC, local, ISO, and RFC formats.
+        </p>
+        <div class="tool-meta">
+          <span>Live epoch time</span>
+          <span>UTC and local output</span>
+          <span>Quick duration table</span>
+        </div>
+        <a href="/tools/timestamp-converter/" class="tool-link">Launch tool</a>
       </article>
     </section>
 
