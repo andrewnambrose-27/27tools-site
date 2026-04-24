@@ -68,15 +68,23 @@ if (toolsTitleImage) {
 }
 
 if (menuToggle && menuPanel) {
-  menuToggle.addEventListener("click", () => {
-    const isOpen = menuPanel.classList.toggle("is-open");
+  const menuToggleText = menuToggle.querySelector(".sr-only");
+  const setMenuState = (isOpen) => {
+    menuPanel.classList.toggle("is-open", isOpen);
     menuToggle.setAttribute("aria-expanded", String(isOpen));
+
+    if (menuToggleText) {
+      menuToggleText.textContent = isOpen ? "Close navigation menu" : "Open navigation menu";
+    }
+  };
+
+  menuToggle.addEventListener("click", () => {
+    setMenuState(!menuPanel.classList.contains("is-open"));
   });
 
   document.addEventListener("click", (event) => {
     if (!menuPanel.classList.contains("is-open")) return;
     if (event.target.closest(".site-menu")) return;
-    menuPanel.classList.remove("is-open");
-    menuToggle.setAttribute("aria-expanded", "false");
+    setMenuState(false);
   });
 }
