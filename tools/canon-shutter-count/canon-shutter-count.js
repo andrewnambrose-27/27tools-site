@@ -696,14 +696,14 @@ function renderResult(result) {
   const countMarkup = result.shutterCount
     ? `
       <div class="hero-result">
-        <span class="hero-result-label">Estimated shutter count</span>
+        <span class="hero-result-label">CAMERA SHUTTER COUNT</span>
         <strong class="hero-result-value">${result.shutterCount.toLocaleString()}</strong>
         <span class="hero-result-note">Source tag: ${safeSourceTag}</span>
       </div>
     `
     : `
       <div class="hero-result">
-        <span class="hero-result-label">Estimated shutter count</span>
+        <span class="hero-result-label">CAMERA SHUTTER COUNT</span>
         <strong class="hero-result-value">Unavailable</strong>
         <span class="hero-result-note">Try a different original CR3 directly from the camera.</span>
       </div>
@@ -794,6 +794,23 @@ function sortObjectDeep(value, seen = new WeakSet()) {
   return output;
 }
 
+function buildCanonMetadataFallback(primaryData, canonData, result) {
+  if (!result?.metadataFound) {
+    return null;
+  }
+
+  return {
+    Make: result.make || "Unknown",
+    Model: result.model || "Unknown",
+    DateTimeOriginal: result.capturedAt || "Unknown",
+    Software: result.software || "Not listed",
+    ShutterCount: result.shutterCount || "Unavailable",
+    ShutterCountSource: result.sourceTag || "Not found",
+    CanonMakerNoteAvailable: Boolean(canonData?.metadataFound),
+    PrimaryMetadataAvailable: Boolean(primaryData?.metadataFound),
+    ParserNote: "CR3 metadata was read with the local Canon parser because the EXIF library did not return a full CR3 payload."
+  };
+}
 function renderExifData(exifData) {
   parsedExif = exifData ? sortObjectDeep(exifData) : null;
   copyExifButton.disabled = !parsedExif;
@@ -911,9 +928,9 @@ async function analyzeFile() {
         (tags && Object.keys(tags).length)
       )
     };
-
+    const metadataForViewer = tags || buildCanonMetadataFallback(primaryData, canonData, parsedResult);
     renderResult(parsedResult);
-    renderExifData(tags);
+    renderExifData(metadataForViewer);
     resultState.textContent = parsedResult.shutterCount ? "Found" : "Needs another file";
 
     const limitState = getLimitState();
