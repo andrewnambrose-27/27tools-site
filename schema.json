@@ -27,7 +27,7 @@
       "@id": "https://27tools.co/#webpage",
       "url": "https://27tools.co/",
       "name": "27Tools | Fast, Simple Online Tools",
-      "description": "Browse online tools from 27Tools, including PNG to WEBP conversion, Sony and Canon shutter count checks, HEX to RGB colour conversion, and Unix timestamp conversion.",
+      "description": "Browse online tools from 27Tools, including PNG to WEBP conversion, Sony, Canon, and Nikon shutter count checks, HEX to RGB colour conversion, and Unix timestamp conversion.",
       "isPartOf": {
         "@id": "https://27tools.co/#website"
       },
@@ -43,6 +43,9 @@
         },
         {
           "@id": "https://27tools.co/tools/canon-shutter-count/#app"
+        },
+        {
+          "@id": "https://27tools.co/tools/nikon-shutter-count/#app"
         },
         {
           "@id": "https://27tools.co/tools/hex-to-rgb-to-pantone/#app"

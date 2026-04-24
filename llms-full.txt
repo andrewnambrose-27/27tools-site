@@ -62,6 +62,17 @@ Key details:
 - Intended for browser-side metadata reading.
 - Useful when checking camera wear before buying or selling.
 
+### Nikon Shutter Count Tool
+
+URL:
+- https://27tools.co/tools/nikon-shutter-count/
+
+Read Nikon shutter count metadata from an original NEF file in the browser. The tool scans Nikon maker-note metadata locally and keeps the full EXIF viewer available for inspection.
+
+Useful for:
+- Checking shutter counts from original Nikon NEF files.
+- Reviewing camera make, model, capture date, and available EXIF data.
+- Preparing camera bodies for sale without uploading raw files.
 ### HEX to RGB and Pantone
 
 URL:
