@@ -211,6 +211,11 @@ body::after {
   text-align: left;
 }
 
+.site-menu .submenu .submenu-link {
+  justify-content: flex-start;
+  text-align: left;
+}
+
 /* if your logo is an image */
 .logo {
   width: min(520px, 92%);
