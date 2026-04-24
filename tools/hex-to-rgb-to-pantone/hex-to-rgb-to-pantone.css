@@ -693,16 +693,24 @@ body::after {
 }
 
 footer {
-  margin-top: 26px;
+  position: relative;
+  z-index: 1;
+  margin-top: 34px;
+  padding-bottom: 20px;
+  font-size: 14px;
+  color: #8d97a3;
   text-align: center;
-  color: #c5ced8;
 }
 
 .footer-inline-link {
-  color: var(--accent-2);
-  text-decoration: none;
+  color: #8d97a3;
+  text-decoration: underline;
+  text-underline-offset: 2px;
 }
 
+.footer-inline-link:hover {
+  color: var(--accent-2);
+}
 @keyframes drift {
   from {
     transform: translate3d(-2%, -2%, 0) scale(1);
