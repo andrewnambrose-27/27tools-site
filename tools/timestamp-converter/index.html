@@ -1,0 +1,317 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Unix Timestamp Converter | 27Tools</title>
+  <meta
+    name="description"
+    content="Convert Unix timestamps to readable dates, turn dates into epoch timestamps, and compare common time durations in seconds and milliseconds."
+  />
+  <link rel="canonical" href="https://27tools.co/tools/timestamp-converter/" />
+  <meta property="og:type" content="website" />
+  <meta property="og:site_name" content="27Tools" />
+  <meta property="og:title" content="Unix Timestamp Converter | 27Tools" />
+  <meta property="og:description" content="Convert Unix timestamps to readable dates, turn dates into epoch timestamps, and compare common time durations in seconds and milliseconds." />
+  <meta property="og:url" content="https://27tools.co/tools/timestamp-converter/" />
+  <meta property="og:image" content="https://27tools.co/og-image.png" />
+  <meta property="og:image:width" content="1200" />
+  <meta property="og:image:height" content="630" />
+  <meta property="og:image:alt" content="27Tools social preview image" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="Unix Timestamp Converter | 27Tools" />
+  <meta name="twitter:description" content="Convert Unix timestamps to readable dates, turn dates into epoch timestamps, and compare common time durations in seconds and milliseconds." />
+  <meta name="twitter:image" content="https://27tools.co/og-image.png" />
+  <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@graph": [
+        {
+          "@type": "WebApplication",
+          "@id": "https://27tools.co/tools/timestamp-converter/#app",
+          "name": "Unix Timestamp Converter",
+          "url": "https://27tools.co/tools/timestamp-converter/",
+          "applicationCategory": "UtilitiesApplication",
+          "operatingSystem": "Any",
+          "browserRequirements": "Requires a modern web browser with JavaScript enabled.",
+          "description": "Convert Unix timestamps to readable dates, turn dates into epoch timestamps, and compare common time durations in seconds and milliseconds.",
+          "isAccessibleForFree": true,
+          "offers": {
+            "@type": "Offer",
+            "price": "0",
+            "priceCurrency": "USD"
+          },
+          "publisher": {
+            "@id": "https://27tools.co/#organization"
+          }
+        },
+        {
+          "@type": "WebPage",
+          "@id": "https://27tools.co/tools/timestamp-converter/#webpage",
+          "url": "https://27tools.co/tools/timestamp-converter/",
+          "name": "Unix Timestamp Converter | 27Tools",
+          "description": "Convert Unix timestamps to readable dates, turn dates into epoch timestamps, and compare common time durations in seconds and milliseconds.",
+          "isPartOf": {
+            "@id": "https://27tools.co/#website"
+          },
+          "mainEntity": {
+            "@id": "https://27tools.co/tools/timestamp-converter/#app"
+          }
+        },
+        {
+          "@type": "BreadcrumbList",
+          "@id": "https://27tools.co/tools/timestamp-converter/#breadcrumb",
+          "itemListElement": [
+            {
+              "@type": "ListItem",
+              "position": 1,
+              "name": "Home",
+              "item": "https://27tools.co/"
+            },
+            {
+              "@type": "ListItem",
+              "position": 2,
+              "name": "Tools",
+              "item": "https://27tools.co/"
+            },
+            {
+              "@type": "ListItem",
+              "position": 3,
+              "name": "Unix Timestamp Converter",
+              "item": "https://27tools.co/tools/timestamp-converter/"
+            }
+          ]
+        }
+      ]
+    }
+  </script>
+  <meta
+    http-equiv="Content-Security-Policy"
+    content="default-src 'self'; script-src 'self'; connect-src 'self' https://analytics.27tools.co; style-src 'self'; img-src 'self' data:; font-src 'self'; object-src 'none'; base-uri 'self'; frame-ancestors 'none'; form-action 'self'"
+  />
+  <link rel="manifest" href="/manifest.json" />
+  <link rel="stylesheet" href="./timestamp-converter.css" />
+  <script src="/site-analytics.js" defer></script>
+  <script src="./timestamp-converter.js" defer></script>
+</head>
+<body>
+  <div class="cursor-glow"></div>
+  <div class="particles"></div>
+  <nav class="site-menu">
+    <button class="menu-toggle" type="button" aria-expanded="false" aria-controls="menuPanel">
+      <span></span>
+      <span></span>
+      <span></span>
+      <span class="sr-only">Open navigation menu</span>
+    </button>
+    <div class="menu-panel" id="menuPanel">
+      <a href="/" class="menu-link">Home</a>
+      <a href="/about/" class="menu-link">About Us</a>
+      <a href="/privacy/" class="menu-link">Privacy Policy</a>
+      <details class="menu-group">
+        <summary class="menu-link menu-parent">Tools</summary>
+        <div class="submenu">
+          <a href="/tools/png-to-webp/" class="submenu-link">PNG to WEBP</a>
+          <a href="/tools/camera-shutter-count/" class="submenu-link">Sony Shutter Count Tool</a>
+          <a href="/tools/canon-shutter-count/" class="submenu-link">Canon Shutter Count Tool</a>
+          <a href="/tools/hex-to-rgb-to-pantone/" class="submenu-link">HEX to RGB to Pantone Converter</a>
+          <a href="/tools/timestamp-converter/" class="submenu-link">Unix Timestamp Converter</a>
+        </div>
+      </details>
+    </div>
+  </nav>
+
+  <div class="container tool-page-container">
+    <a href="/" class="tool-page-brand" aria-label="Go to 27Tools home">
+      <img src="/logo.png" alt="27Tools logo" class="tool-page-brand-image" />
+    </a>
+
+    <section class="hero-card tool-hero-card" id="tool-page-card">
+      <div class="tool-shell">
+        <div class="tool-shell-main">
+          <div class="tool-heading">
+            <div class="status-row tool-status-row">
+              <span class="status-pill">Unix timestamp</span>
+              <span class="status-pill">UTC and local output</span>
+              <span class="status-pill">Seconds to nanoseconds</span>
+            </div>
+
+            <div class="tool-title-lockup">
+              <p class="tool-kicker">Time converter</p>
+              <h1 class="tool-title">Convert <span class="accent">Unix timestamps</span> into readable dates</h1>
+            </div>
+
+            <p class="tool-subtitle">
+              Convert an epoch timestamp to UTC and local time, build a timestamp from a date, copy common formats,
+              and keep a quick reference table for everyday durations.
+            </p>
+          </div>
+
+          <div class="live-clock-panel" aria-live="polite">
+            <div>
+              <p class="eyebrow">Current epoch Unix timestamp</p>
+              <strong id="liveTimestamp">0</strong>
+              <span id="liveTimestampMeta">seconds since Jan 1 1970 UTC</span>
+            </div>
+            <button type="button" class="secondary-link mini-button" id="copyLiveButton">Copy current</button>
+          </div>
+
+          <div class="tool-layout">
+            <aside class="tool-panel control-panel">
+              <div class="panel-block">
+                <p class="eyebrow">Timestamp to date</p>
+                <div class="value-card">
+                  <label for="timestampInput" class="field-label">Enter a timestamp</label>
+                  <input
+                    id="timestampInput"
+                    class="text-input"
+                    type="text"
+                    inputmode="numeric"
+                    autocomplete="off"
+                    spellcheck="false"
+                    aria-describedby="timestampHelp"
+                  />
+                  <span id="timestampHelp">Supports seconds, milliseconds, microseconds, and nanoseconds.</span>
+                  <label for="timestampUnit" class="field-label">Input unit</label>
+                  <select id="timestampUnit" class="select-input">
+                    <option value="auto">Auto detect</option>
+                    <option value="seconds">Seconds</option>
+                    <option value="milliseconds">Milliseconds</option>
+                    <option value="microseconds">Microseconds</option>
+                    <option value="nanoseconds">Nanoseconds</option>
+                  </select>
+                </div>
+              </div>
+
+              <div class="tool-actions">
+                <button type="button" class="app-link tool-button" id="convertTimestampButton">Convert timestamp</button>
+                <button type="button" class="secondary-link tool-button" id="useNowButton">Use current time</button>
+                <button type="button" class="secondary-link tool-button" id="copyIsoButton">Copy ISO</button>
+              </div>
+
+              <div class="panel-block">
+                <p class="eyebrow">Date to timestamp</p>
+                <div class="value-card">
+                  <label for="dateInput" class="field-label">Date and time</label>
+                  <input id="dateInput" class="datetime-input" type="datetime-local" step="1" />
+                  <label for="dateMode" class="field-label">Interpret as</label>
+                  <select id="dateMode" class="select-input">
+                    <option value="local">Your local timezone</option>
+                    <option value="utc">UTC</option>
+                  </select>
+                </div>
+              </div>
+
+              <div class="tool-actions">
+                <button type="button" class="app-link tool-button" id="convertDateButton">Convert date</button>
+                <button type="button" class="secondary-link tool-button" id="setDateNowButton">Set date to now</button>
+              </div>
+
+              <div class="panel-block">
+                <p class="eyebrow">Date output</p>
+                <div class="stats-grid">
+                  <div class="stat-card">
+                    <span class="stat-label">Seconds</span>
+                    <strong id="dateSecondsValue">0</strong>
+                  </div>
+                  <div class="stat-card">
+                    <span class="stat-label">Milliseconds</span>
+                    <strong id="dateMillisecondsValue">0</strong>
+                  </div>
+                  <div class="stat-card">
+                    <span class="stat-label">Timezone</span>
+                    <strong id="timezoneValue">Local</strong>
+                  </div>
+                  <div class="stat-card">
+                    <span class="stat-label">Relative</span>
+                    <strong id="relativeValue">Now</strong>
+                  </div>
+                </div>
+              </div>
+            </aside>
+
+            <div class="tool-panel workspace-panel">
+              <section class="panel-block">
+                <div class="section-head">
+                  <div>
+                    <p class="eyebrow">Readable output</p>
+                    <h2>The timestamp translates to</h2>
+                  </div>
+                  <span class="panel-hint" id="detectedUnit">Auto detected seconds</span>
+                </div>
+                <div class="format-table-wrap">
+                  <table class="format-table">
+                    <thead>
+                      <tr>
+                        <th>Format</th>
+                        <th>Value</th>
+                      </tr>
+                    </thead>
+                    <tbody id="formatRows"></tbody>
+                  </table>
+                </div>
+              </section>
+
+              <section class="panel-block">
+                <div class="section-head">
+                  <div>
+                    <p class="eyebrow">Quick reference</p>
+                    <h2>Common durations as timestamps</h2>
+                  </div>
+                  <span class="panel-hint">Seconds and milliseconds</span>
+                </div>
+                <div class="format-table-wrap">
+                  <table class="format-table">
+                    <thead>
+                      <tr>
+                        <th>Human readable time</th>
+                        <th>Seconds</th>
+                        <th>Milliseconds</th>
+                      </tr>
+                    </thead>
+                    <tbody id="durationRows"></tbody>
+                  </table>
+                </div>
+              </section>
+
+              <section class="panel-block">
+                <div class="section-head">
+                  <div>
+                    <p class="eyebrow">Notes</p>
+                    <h2>Unix timestamp basics</h2>
+                  </div>
+                  <span class="panel-hint">UTC based</span>
+                </div>
+                <div class="note-grid">
+                  <article class="note-card">
+                    <strong>What is a Unix timestamp?</strong>
+                    <p>
+                      A Unix timestamp counts elapsed time since 00:00:00 UTC on 1 January 1970.
+                      The number is timezone neutral; the readable date changes only when you display it in a timezone.
+                    </p>
+                  </article>
+                  <article class="note-card">
+                    <strong>What happens on 19 January 2038?</strong>
+                    <p>
+                      Older 32-bit signed timestamp systems overflow at 03:14:07 UTC on 19 January 2038.
+                      Modern 64-bit systems have a much larger range.
+                    </p>
+                  </article>
+                </div>
+              </section>
+
+              <section class="status-banner" id="statusBanner" aria-live="polite">
+                Enter a Unix timestamp or convert a date to get started.
+              </section>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <footer>
+      <p>&copy; 2026 27Tools - Built by 27Tools - <a href="/about/" class="footer-inline-link">About</a> - <a href="/privacy/" class="footer-inline-link">Privacy</a></p>
+    </footer>
+  </div>
+</body>
+</html>
