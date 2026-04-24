@@ -120,7 +120,7 @@ body::after {
   position: absolute;
   left: 17px;
   width: 24px;
-  height: 2px;
+  height: 3px;
   border-radius: 999px;
   background: linear-gradient(90deg, var(--accent-2), var(--accent));
   transform-origin: center;
@@ -128,7 +128,7 @@ body::after {
 }
 
 .menu-toggle span:not(.sr-only):nth-child(1) {
-  top: 19px;
+  top: 18px;
 }
 
 .menu-toggle span:not(.sr-only):nth-child(2) {
@@ -136,7 +136,7 @@ body::after {
 }
 
 .menu-toggle span:not(.sr-only):nth-child(3) {
-  top: 37px;
+  top: 38px;
 }
 
 .menu-toggle:hover {
@@ -679,7 +679,7 @@ footer a:hover {
   }
 
   .menu-toggle span:not(.sr-only):nth-child(1) {
-    top: 17px;
+    top: 16px;
   }
 
   .menu-toggle span:not(.sr-only):nth-child(2),
@@ -689,7 +689,7 @@ footer a:hover {
   }
 
   .menu-toggle span:not(.sr-only):nth-child(3) {
-    top: 33px;
+    top: 34px;
   }
 
   .container {
