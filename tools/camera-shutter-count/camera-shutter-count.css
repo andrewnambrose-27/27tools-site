@@ -697,8 +697,14 @@ footer {
 }
 
 .footer-inline-link {
+  color: #8d97a3;
+  text-decoration: underline;
+  text-underline-offset: 2px;
+  transition: color 0.2s ease;
+}
+
+.footer-inline-link:hover {
   color: var(--accent-2);
-  text-decoration: none;
 }
 
 @keyframes drift {
