@@ -436,7 +436,7 @@ function renderResult(result) {
     `
     : `
       <div class="hero-result">
-        <span class="hero-result-label">Estimated shutter count</span>
+        <span class="hero-result-label">Camera shutter count</span>
         <strong class="hero-result-value">Unavailable</strong>
         <span class="hero-result-note">Try a different original Nikon NEF directly from the camera.</span>
       </div>
