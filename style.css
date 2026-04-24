@@ -86,7 +86,7 @@ body::after {
 .container {
   position: relative;
   z-index: 1;
-  max-width: 860px;
+  max-width: 1180px;
   margin: 0 auto;
   padding: 100px 20px 60px;
 }
@@ -825,12 +825,14 @@ footer a:hover {
 
 .tool-grid {
   display: grid;
-  gap: 24px;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 22px;
   margin-top: 44px;
 }
 
 .tools-title-wrap {
   display: grid;
+  grid-column: 1 / -1;
   place-items: center;
   padding: 8px 0 10px;
 }
@@ -844,9 +846,10 @@ footer a:hover {
 }
 
 .tool-card {
-  max-width: 760px;
-  margin: 0 auto;
-  padding: 26px 24px 24px;
+  width: 100%;
+  min-width: 0;
+  margin: 0;
+  padding: 22px 20px 20px;
   border: 1px solid rgba(255, 255, 255, 0.10);
   border-radius: 24px;
   background:
@@ -907,7 +910,13 @@ footer a:hover {
   text-align: right;
 }
 
-.tool-card h2,
+.tool-card h2 {
+  margin: 0 0 12px;
+  font-size: clamp(23px, 2.2vw, 30px);
+  line-height: 1.08;
+  letter-spacing: -0.02em;
+}
+
 .section-head h2 {
   margin: 0 0 12px;
   font-size: clamp(28px, 4vw, 36px);
@@ -1284,6 +1293,12 @@ input[type="range"] {
   background: rgba(160, 36, 36, 0.14);
 }
 
+
+@media (max-width: 1100px) {
+  .tool-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
 @media (max-width: 980px) {
   .tool-layout {
     grid-template-columns: 1fr;
@@ -1298,6 +1313,12 @@ input[type="range"] {
   }
 }
 
+
+@media (max-width: 760px) {
+  .tool-grid {
+    grid-template-columns: 1fr;
+  }
+}
 @media (max-width: 640px) {
   .tool-card {
     padding: 22px 18px;
