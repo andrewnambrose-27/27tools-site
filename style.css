@@ -207,6 +207,8 @@ body::after {
 .submenu-link {
   font-size: 14px;
   color: #cfd7df;
+  justify-content: flex-start;
+  text-align: left;
 }
 
 /* if your logo is an image */
